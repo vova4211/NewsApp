@@ -29,9 +29,9 @@ interface NewsRepository {
 
     fun getCategoryNewsPager(category: String): Flow<PagingData<ArticleEntity>>
 
-    fun getHomeNewsFromDb() : PagingSource<Int, ArticleEntity>
+    fun getHomeNewsFromDb(query: String) : PagingSource<Int, ArticleEntity>
     fun getCategoryNewsFromDb(category: String) : PagingSource<Int, ArticleEntity>
-    suspend fun clearHomeNews()
+    suspend fun clearHomeNews(query: String)
     suspend fun clearCategoryNews(category: String)
     suspend fun insertArticles(articles: List<ArticleEntity>)
 

@@ -23,6 +23,10 @@ data class ArticleEntity(
     @ColumnInfo(name = "published_at")
     val publishedAt: String?,
     @ColumnInfo(name = "category")
-    val category: String? = null
+    val category: String?,
+    @ColumnInfo(name = "query")
+    val query: String?,
+    @ColumnInfo(name = "type")
+    val type: String
 
 )

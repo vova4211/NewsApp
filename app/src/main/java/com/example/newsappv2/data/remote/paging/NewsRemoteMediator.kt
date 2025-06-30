@@ -57,15 +57,15 @@ class NewsRemoteMediator(
 
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    if (category == null) {
-                        repository.clearHomeNews()
-                    } else {
+                    if (category != null) {
                         repository.clearCategoryNews(category)
+                    } else if (query != null) {
+                        repository.clearHomeNews(query)
                     }
                 }
 
                 val entities = articles.map {
-                    com.example.newsappv2.data.local.db.entities.ArticleEntity(
+                    ArticleEntity(
                         sourceName = it.source.name,
                         author = it.author,
                         title = it.title,
@@ -73,7 +73,9 @@ class NewsRemoteMediator(
                         url = it.url,
                         urlToImage = it.urlToImage,
                         publishedAt = it.publishedAt,
-                        category = category
+                        category = category,
+                        query = query,
+                        type = if (category != null) "category" else "search"
                     )
                 }
                 repository.insertArticles(entities)

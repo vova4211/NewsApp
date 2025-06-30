@@ -21,13 +21,13 @@ class NetworkNewsRepository(
 ) : NewsRepository {
 
 
-    override fun getHomeNewsFromDb(): PagingSource<Int, ArticleEntity> =
-        database.articleDao().getHomeNews()
+    override fun getHomeNewsFromDb(query: String): PagingSource<Int, ArticleEntity> =
+        database.articleDao().getHomeNews(query)
 
     override fun getCategoryNewsFromDb(category: String): PagingSource<Int, ArticleEntity> =
         database.articleDao().getCategoryNews(category)
 
-    override suspend fun clearHomeNews() = database.articleDao().clearHomeNews()
+    override suspend fun clearHomeNews(query: String) = database.articleDao().clearHomeNews(query)
     override suspend fun clearCategoryNews(category: String) =
         database.articleDao().clearCategoryNews(category)
 
@@ -80,7 +80,7 @@ class NetworkNewsRepository(
                 category = null
             ),
             pagingSourceFactory = {
-                database.articleDao().getHomeNews()
+                database.articleDao().getHomeNews(query)
             }
 
         ).flow
