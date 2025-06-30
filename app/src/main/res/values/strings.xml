@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">News AppV2</string>
+    <string name="retry">Retry</string>
+    <string name="loading">Loading</string>
+    <string name="back_button">back</string>
+
+    <string name="loading_failed">Failed to load</string>
+    <string name="author_unknown">Author unknown</string>
+    <string name="title_unknown">Title unknown</string>
+    <string name="unknown_description">Unknown description</string>
+    <string name="unknown_when_published">Unknown when published</string>
+    <string name="unknown_source">Unknown source</string>
+    <string name="missing_image">missing image</string>
+    <string name="go_to_the_website">Go to the website</string>
+    <string name="enter_a_new_query">Enter a new query</string>
+    <string name="email_icon">Email Icon</string>
+    <string name="clear_text">Clear text</string>
+    <string name="search_icon">Search icon</string>
+    <string name="menu_drawer_icon">Menu drawer icon</string>
+    <string name="select_category">Select category</string>
+    <string name="home_screen">Home Screen</string>
+    <string name="home">Home</string>
+    <string name="categories_screen">Categories Screen</string>
+    <string name="categories">Categories</string>
+</resources>
