@@ -29,13 +29,13 @@ fun PreviousQueryContainer(
                 shape = RoundedCornerShape(4.dp)
             )
             .clickable { onUseLastQuery(lastQuery) }
-            .padding(horizontal = 16.dp, vertical = 12.dp), // адекватні падінги
+            .padding(horizontal = 16.dp, vertical = 12.dp),
         contentAlignment = Alignment.CenterStart
     ) {
         Text(
-            text = "Previous query: $lastQuery",
+            text = lastQuery,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.9f)
+            color = MaterialTheme.colorScheme.primary.copy(alpha = 1f)
         )
     }
 }

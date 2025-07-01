@@ -1,5 +1,6 @@
 package com.example.newsappv2.ui.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -43,7 +44,8 @@ fun OutlinedTextFieldHomeScreen(
                 IconButton(onClick = { onSearchTextChange("") }) {
                     Icon(
                         imageVector = Icons.Filled.Clear,
-                        contentDescription = stringResource(R.string.clear_text)
+                        contentDescription = stringResource(R.string.clear_text),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             },
@@ -65,7 +67,7 @@ fun OutlinedTextFieldHomeScreen(
             )
         )
 
-        if (isFocused && lastQuery.isNotBlank() && lastQuery != searchQuery) {
+        AnimatedVisibility(visible = isFocused && lastQuery.isNotBlank() && lastQuery != searchQuery) {
             PreviousQueryContainer(
                 lastQuery = lastQuery,
                 onUseLastQuery = onUseLastQuery,

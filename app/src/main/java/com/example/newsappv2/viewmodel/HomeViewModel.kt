@@ -31,9 +31,6 @@ class HomeViewModel(
     private val userPreferencesDataStore: UserPreferencesDataStore
 ) : ViewModel() {
 
-//    private val _homeNewsUiState = MutableStateFlow<NewsUiState>(NewsUiState.Loading)
-//    val homeNewsUiState: StateFlow<NewsUiState> = _homeNewsUiState.asStateFlow()
-
     private val _searchQuery  = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
     private val defaultQuery: String  = DEFAULT_QUERY
@@ -42,26 +39,9 @@ class HomeViewModel(
     val lastSearchQuery: StateFlow<String> = _lastSearchQuery.asStateFlow()
 
     init {
-//        fetchNews(defaultQuery)
-//       viewModelScope.launch {
-//           _searchQuery
-//               .debounce(500)
-//               .distinctUntilChanged()
-//               .collectLatest { currentQuery ->
-//                   if(currentQuery.isNotBlank()) {
-//                       fetchNews(currentQuery)
-//                   } else {
-//                       fetchNews(defaultQuery)
-//                   }
-//               }
-//       }
-    }
-
-    init {
         viewModelScope.launch {
             userPreferencesDataStore.searchQuery.collectLatest { query ->
                 _lastSearchQuery.value = query
-//                _searchQuery.value = query
             }
         }
     }
@@ -87,8 +67,6 @@ class HomeViewModel(
                 initialValue = PagingData.empty()
             )
 
-
-
     fun onSearchTextChanged(newQuery: String) {
         _searchQuery.value = newQuery
     }
@@ -98,32 +76,4 @@ class HomeViewModel(
             userPreferencesDataStore.saveLastQuery(searchQuery)
         }
     }
-
-
-//    fun getSelectedCategory(): Flow<String>
-
-
-//    private fun fetchNews(query: String) {
-//        viewModelScope.launch {
-//            _homeNewsUiState.value = NewsUiState.Loading
-//            _homeNewsUiState.value = try {
-//                val response = repository.searchNews(query)
-//                if (response.isSuccessful && response.body() != null) {
-//                    NewsUiState.Success(response.body()!!)
-//                } else {
-//                    Log.w("HomeViewModel", "Unsuccessful response: ${response.code()}")
-//                    NewsUiState.Error
-//                }
-//            } catch (e: IOException) {
-//                Log.e("NewsViewModel", "Network error", e)
-//                NewsUiState.Error
-//            } catch (e: HttpException) {
-//                Log.e("NewsViewModel", "HTTP error", e)
-//                NewsUiState.Error
-//            }catch (e: Exception) {
-//                Log.e("NewsViewModel", "Unexpected error", e)
-//                NewsUiState.Error
-//            }
-//        }
-//    }
 }

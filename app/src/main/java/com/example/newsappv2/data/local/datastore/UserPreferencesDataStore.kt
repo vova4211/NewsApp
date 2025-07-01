@@ -54,9 +54,6 @@ class UserPreferencesDataStore(
         }
     }
 
-
-
-
     companion object {
         private  val SEARCH_QUERY = stringPreferencesKey("search_query")
         private val SELECTED_CATEGORY = stringPreferencesKey("selected_category")

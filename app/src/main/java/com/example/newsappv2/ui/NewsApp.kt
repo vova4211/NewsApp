@@ -1,7 +1,5 @@
 package com.example.newsappv2.ui
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -12,7 +10,6 @@ import com.example.newsappv2.viewmodel.CategoryViewModel
 import com.example.newsappv2.viewmodel.HomeViewModel
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NewsApp(
     modifier: Modifier = Modifier,

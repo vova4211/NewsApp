@@ -1,11 +1,7 @@
 package com.example.newsappv2.navigation
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -21,7 +17,6 @@ import com.example.newsappv2.viewmodel.CategoryViewModel
 import com.example.newsappv2.viewmodel.HomeViewModel
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NewsNavHost(
     navController: NavHostController,
@@ -30,8 +25,6 @@ fun NewsNavHost(
     viewModelHome: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
     viewModelCategory: CategoryViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val selectCategory by viewModelCategory.selectCategory.collectAsState()
-    val searchQuery by viewModelHome.searchQuery.collectAsState()
     NavHost(
         navController = navController,
         startDestination = HomeDestination.route,
@@ -39,17 +32,13 @@ fun NewsNavHost(
     ) {
         composable(route = HomeDestination.route) {
             HomeScreen(
-                retryAction = { viewModelHome.onSearchTextChanged(searchQuery) },
                 viewModel = viewModelHome,
-                contentPadding = contentPadding,
-                navigateToCategories = { navController.navigate(CategoriesDestination.route) }
+                contentPadding = contentPadding
             )
         }
         composable(route = CategoriesDestination.route) {
             CategoriesScreen(
-                navigateBack = { navController.popBackStack() },
                 viewModel = viewModelCategory,
-                retryAction = { viewModelCategory.onCategorySelected(viewModelCategory.selectCategory.value)},
                 contentPadding = contentPadding,
             )
         }

@@ -4,18 +4,26 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -48,10 +57,13 @@ fun NewsCard(
     val publishedAtText = article.publishedAt ?: stringResource(R.string.unknown_when_published)
     val context = LocalContext.current
 
+    var isLoading by remember { mutableStateOf(!urlToImageText.isNullOrBlank()) }
+
+
     Card(
         modifier = modifier
             .padding(8.dp)
-            .fillMaxSize(),
+            .fillMaxWidth(),
         border = BorderStroke(2.dp, MaterialTheme.colorScheme.outlineVariant),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -72,29 +84,43 @@ fun NewsCard(
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(4.dp))
-            AsyncImage(
-                model = ImageRequest.Builder(context)
-                    .data(urlToImageText)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = stringResource(R.string.missing_image),
-                contentScale = ContentScale.Crop,
-                error = painterResource(R.drawable.poshel_nahyi),
-                placeholder = painterResource(R.drawable.loading_img),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
-            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Box( modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(16f / 9f)
+                .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+            ) {
+                AsyncImage(
+                    model = ImageRequest.Builder(context)
+                        .data(urlToImageText)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = stringResource(R.string.missing_image),
+                    contentScale = ContentScale.FillWidth,
+                    error = painterResource(R.drawable.no_data_amico),
+                    onSuccess = { isLoading = false},
+                    onError = { isLoading = false},
+                    onLoading = { isLoading = true},
+                    modifier = Modifier.fillMaxSize()
+                    )
+
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .size(40.dp)
+                    )
+                }
+            }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = authorText,
-                style = MaterialTheme.typography.labelLarge,
+                text = stringResource(R.string.author) + authorText,
+                style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.fillMaxWidth()
             )
             Text(
-                text = nameText,
+                text = stringResource(R.string.publishing_house) + nameText,
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.fillMaxWidth()
@@ -102,28 +128,30 @@ fun NewsCard(
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = publishedAtText.formatAsDate(),
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = descriptionText,
+                maxLines = 4,
+                overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = stringResource(R.string.go_to_the_website),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                text = stringResource(R.string.read_more),
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .align(Alignment.End)
                     .clickable {
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlText))
                         context.startActivity(intent)
                     },
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 textDecoration = TextDecoration.Underline
             )
 

@@ -29,15 +29,9 @@ class CategoryViewModel(
     private val userPreferencesDataStore: UserPreferencesDataStore
 ) : ViewModel() {
 
-//    private val _categoryNewsUiState = MutableStateFlow<NewsUiState>(NewsUiState.Loading)
-//    val categoryNewsUiState: StateFlow<NewsUiState> = _categoryNewsUiState
-
     private val _selectCategory = MutableStateFlow(Category.BUSINESS)
     val selectCategory: StateFlow<Category> = _selectCategory.asStateFlow()
 
-//    init {
-//        fetchCategoriesNews(_selectCategory.value.categoryName.lowercase())
-//    }
 
     init {
         viewModelScope.launch {
@@ -64,12 +58,8 @@ class CategoryViewModel(
                 started = SharingStarted.WhileSubscribed(5000),
                 initialValue = PagingData.empty()
             )
-
-
-
     fun onCategorySelected(category: Category) {
         _selectCategory.value = category
-//        fetchCategoriesNews(category.categoryName.lowercase())
 
     }
 
@@ -78,24 +68,4 @@ class CategoryViewModel(
             userPreferencesDataStore.saveSelectedCategory(category)
         }
     }
-
-//    private fun fetchCategoriesNews(category: String) {
-//        viewModelScope.launch {
-//            _categoryNewsUiState.value = NewsUiState.Loading
-//            try {
-//                val response = repository.getTopHeadlines(category)
-//                if (response.isSuccessful && response.body() != null) {
-//                    Log.d("CategoryVM", "News loaded for $category: ${response.body()!!.articles.size} articles")
-//                    _categoryNewsUiState.value = NewsUiState.Success(response.body()!!)
-//                } else {
-//                    Log.e("CategoryVM", "Response error: ${response.code()}")
-//                    _categoryNewsUiState.value = NewsUiState.Error
-//                }
-//            } catch (e: Exception) {
-//                Log.e("CategoryVM", "Exception loading news", e)
-//                _categoryNewsUiState.value = NewsUiState.Error
-//            }
-//        }
-//    }
-
 }
