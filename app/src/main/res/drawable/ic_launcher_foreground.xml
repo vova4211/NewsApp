@@ -3,7 +3,7 @@
     android:height="108dp"
     android:viewportWidth="960"
     android:viewportHeight="960"
-    android:tint="?attr/colorControlNormal">
+    android:tint="@android:color/background_dark">
   <group android:scaleX="0.53"
       android:scaleY="0.53"
       android:translateX="225.6"
