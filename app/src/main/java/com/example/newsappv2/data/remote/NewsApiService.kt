@@ -1,5 +1,6 @@
 package com.example.newsappv2.data.remote
 
+import com.example.newsappv2.BuildConfig
 import com.example.newsappv2.data.model.NewsResponse
 import com.example.newsappv2.util.Constants.DEFAULT_LANGUAGE
 import com.example.newsappv2.util.Constants.DEFAULT_PAGE_SIZE
@@ -29,6 +30,4 @@ interface NewsApiService {
         @Query("pageSize") pageSize: Int = DEFAULT_PAGE_SIZE,
         @Query("page") page: Int = 1
     ) : Response<NewsResponse>
-
-
 }

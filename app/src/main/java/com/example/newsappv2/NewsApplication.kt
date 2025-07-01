@@ -1,10 +1,18 @@
 package com.example.newsappv2
 
 import android.app.Application
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.newsappv2.data.AppContainer
 import com.example.newsappv2.data.local.datastore.UserPreferencesDataStore
 import com.example.newsappv2.data.local.datastore.dataStore
+import com.example.newsappv2.data.worker.NewsCheckWorker
 import com.example.newsappv2.di.DefaultAppContainer
+import java.util.concurrent.TimeUnit
 
 class NewsApplication : Application() {
     lateinit var container: AppContainer
@@ -14,5 +22,29 @@ class NewsApplication : Application() {
         super.onCreate()
         container = DefaultAppContainer(this)
         userPreferencesDataStore = UserPreferencesDataStore(dataStore)
+
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val oneTimeWorkRequest = OneTimeWorkRequestBuilder<NewsCheckWorker>()
+            .setInitialDelay(10, TimeUnit.SECONDS)
+            .setConstraints(constraints)
+            .build()
+
+        WorkManager.getInstance(this).enqueue(oneTimeWorkRequest)
+
+        val periodicWorkRequest = PeriodicWorkRequestBuilder<NewsCheckWorker>(
+            6, TimeUnit.HOURS
+        )
+            .setConstraints(constraints)
+            .build()
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "NewsCheckWork",
+            ExistingPeriodicWorkPolicy.KEEP,
+            periodicWorkRequest
+        )
     }
 }

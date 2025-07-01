@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.android)
     implementation(libs.androidx.navigation.compose.android)
     implementation(libs.engage.core)
+    implementation(libs.androidx.ui.text.google.fonts)
     ksp(libs.room.compiler)
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)

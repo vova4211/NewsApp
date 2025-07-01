@@ -2,8 +2,6 @@ package com.example.newsappv2.ui.components
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -36,7 +34,6 @@ import com.example.newsappv2.data.model.Source
 import com.example.newsappv2.ui.theme.NewsAppV2Theme
 import com.example.newsappv2.util.formatAsDate
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NewsCard(
     modifier: Modifier = Modifier,
@@ -135,7 +132,6 @@ fun NewsCard(
 }
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun NewsCardPreview(

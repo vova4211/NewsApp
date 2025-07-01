@@ -20,6 +20,7 @@ paging = "3.3.6"
 navigationRuntimeAndroid = "2.9.0"
 navigationComposeAndroid = "2.9.0"
 engageCore = "1.5.8"
+uiTextGoogleFonts = "1.8.3"
 
 [libraries]
 room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
@@ -54,6 +55,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 androidx-navigation-runtime-android = { group = "androidx.navigation", name = "navigation-runtime-android", version.ref = "navigationRuntimeAndroid" }
 androidx-navigation-compose-android = { group = "androidx.navigation", name = "navigation-compose-android", version.ref = "navigationComposeAndroid" }
 engage-core = { group = "com.google.android.engage", name = "engage-core", version.ref = "engageCore" }
+androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version = "2.1.21-2.0.2" }
