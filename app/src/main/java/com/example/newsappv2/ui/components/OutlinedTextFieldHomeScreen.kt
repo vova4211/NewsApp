@@ -20,8 +20,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.example.newsappv2.R
 
 
@@ -53,7 +53,7 @@ fun OutlinedTextFieldHomeScreen(
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
+                .height(dimensionResource(id = R.dimen.outlined_text_field_height))
                 .onFocusChanged { focusState ->
                     isFocused = focusState.isFocused
                 },
@@ -71,7 +71,7 @@ fun OutlinedTextFieldHomeScreen(
             PreviousQueryContainer(
                 lastQuery = lastQuery,
                 onUseLastQuery = onUseLastQuery,
-                modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp)
+                modifier = Modifier.padding(top = dimensionResource( id = R.dimen.padding_default), start = dimensionResource( id = R.dimen.padding_large), end = dimensionResource( id = R.dimen.padding_large))
             )
         }
     }

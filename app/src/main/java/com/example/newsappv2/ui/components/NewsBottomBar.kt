@@ -26,9 +26,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.example.newsappv2.R
 import com.example.newsappv2.ui.screens.CategoriesDestination
@@ -46,14 +46,13 @@ fun NewsBottomBar(
 
     BottomAppBar(
         containerColor = MaterialTheme.colorScheme.surface,
-        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
-        tonalElevation = 8.dp,
+        contentPadding = PaddingValues(horizontal = dimensionResource(id = R.dimen.padding_medium), vertical = dimensionResource(id = R.dimen.padding_default)),
+        tonalElevation = dimensionResource(id = R.dimen.bottom_bar_total_elevation),
         actions = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.space_medium))
             ) {
-                // Кнопка Home
                 val homeBackgroundColor by animateColorAsState(
                     targetValue = if (homeSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f) else Color.Transparent
                 )
@@ -64,11 +63,11 @@ fun NewsBottomBar(
                 Box(
                     modifier = Modifier
                         .weight(1f)
-                        .clip(RoundedCornerShape(8.dp))
+                        .clip(RoundedCornerShape(dimensionResource(id  = R.dimen.box_corner_radius)))
                         .background(homeBackgroundColor)
-                        .border(1.dp, homeBorderColor, RoundedCornerShape(8.dp))
+                        .border(dimensionResource(id = R.dimen.bottom_bar_box_border), homeBorderColor, RoundedCornerShape(dimensionResource(id  = R.dimen.box_corner_radius)))
                         .clickable { onTabSelected(HomeDestination.route) }
-                        .padding(vertical = 12.dp, horizontal = 16.dp)
+                        .padding(vertical = dimensionResource(id = R.dimen.padding_medium), horizontal = dimensionResource(id = R.dimen.padding_large))
                 ) {
                     BottomBarItem(
                         icon = Icons.Filled.Home,
@@ -77,8 +76,6 @@ fun NewsBottomBar(
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
-
-                // Кнопка Categories
                 val categoriesBackgroundColor by animateColorAsState(
                     targetValue = if (categoriesSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f) else Color.Transparent
                 )
@@ -89,11 +86,11 @@ fun NewsBottomBar(
                 Box(
                     modifier = Modifier
                         .weight(1f)
-                        .clip(RoundedCornerShape(8.dp))
+                        .clip(RoundedCornerShape(dimensionResource(id  = R.dimen.box_corner_radius)))
                         .background(categoriesBackgroundColor)
-                        .border(1.dp, categoriesBorderColor, RoundedCornerShape(8.dp))
+                        .border(dimensionResource(id = R.dimen.bottom_bar_box_border), categoriesBorderColor, RoundedCornerShape(dimensionResource(id  = R.dimen.box_corner_radius)))
                         .clickable { onTabSelected(CategoriesDestination.route) }
-                        .padding(vertical = 12.dp, horizontal = 16.dp)
+                        .padding(vertical = dimensionResource(id = R.dimen.padding_medium), horizontal = dimensionResource(id = R.dimen.padding_large))
                 ) {
                     BottomBarItem(
                         icon = Icons.Filled.Menu,
@@ -127,7 +124,7 @@ fun BottomBarItem(
             imageVector = icon,
             contentDescription = text,
             tint = iconTint,
-            modifier = Modifier.size(36.dp)
+            modifier = Modifier.size(dimensionResource(id =  R.dimen.bottom_bar_icon_size))
         )
     }
 }

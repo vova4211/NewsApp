@@ -10,10 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.newsappv2.R
 import com.example.newsappv2.data.model.Article
 import com.example.newsappv2.navigation.NavigationDestination
 import com.example.newsappv2.ui.components.NewsCard
@@ -31,7 +32,7 @@ object HomeDestination: NavigationDestination {
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    contentPadding: PaddingValues = PaddingValues(0.dp),
+    contentPadding: PaddingValues = PaddingValues(dimensionResource(id = R.dimen.padding_zero)),
     modifier: Modifier = Modifier
 ) {
     val searchQuery by viewModel.searchQuery.collectAsState()
@@ -61,7 +62,7 @@ fun HomeNewsLazyPagingList(
     onSearchTextChange: (String) -> Unit,
     onUseLastQuery: (String) -> Unit,
     modifier: Modifier =  Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp)
+    contentPadding: PaddingValues = PaddingValues(dimensionResource(id = R.dimen.padding_zero))
 ) {
     Column(modifier = Modifier
         .fillMaxSize()
@@ -75,13 +76,13 @@ fun HomeNewsLazyPagingList(
             onUseLastQuery = onUseLastQuery,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .padding(horizontal = dimensionResource(id = R.dimen.padding_large), vertical = dimensionResource(id = R.dimen.padding_default))
         )
         LazyColumn(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth(),
-            contentPadding = PaddingValues(bottom = 16.dp)
+            contentPadding = PaddingValues(bottom = dimensionResource(id = R.dimen.padding_large))
         ) {
             items(newsItems.itemCount) { index ->
                 val article = newsItems[index]

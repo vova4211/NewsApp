@@ -11,7 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
+import com.example.newsappv2.R
 
 
 @Composable
@@ -24,12 +25,12 @@ fun PreviousQueryContainer(
         modifier = modifier
             .fillMaxWidth()
             .border(
-                width = 1.dp,
+                width = dimensionResource(id = R.dimen.previous_query_border),
                 color = MaterialTheme.colorScheme.outline,
-                shape = RoundedCornerShape(4.dp)
+                shape = RoundedCornerShape(dimensionResource(id = R.dimen.previous_query_corner_shape))
             )
             .clickable { onUseLastQuery(lastQuery) }
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            .padding(horizontal = dimensionResource(id = R.dimen.padding_large), vertical = dimensionResource(id = R.dimen.padding_medium)),
         contentAlignment = Alignment.CenterStart
     ) {
         Text(

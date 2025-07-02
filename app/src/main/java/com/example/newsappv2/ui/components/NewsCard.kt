@@ -29,12 +29,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.newsappv2.R
@@ -62,20 +62,20 @@ fun NewsCard(
 
     Card(
         modifier = modifier
-            .padding(8.dp)
+            .padding(dimensionResource(id = R.dimen.padding_default))
             .fillMaxWidth(),
-        border = BorderStroke(2.dp, MaterialTheme.colorScheme.outlineVariant),
+        border = BorderStroke(dimensionResource(id = R.dimen.card_border_width), MaterialTheme.colorScheme.outlineVariant),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             contentColor = MaterialTheme.colorScheme.onPrimaryContainer
         ),
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.card_corner_radius)),
+        elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(id = R.dimen.card_elevation))
     ) {
 
         Column(
             modifier = Modifier
-                .padding(8.dp),
+                .padding(dimensionResource(id = R.dimen.padding_default)),
             horizontalAlignment = Alignment.Start
         ) {
             Text(
@@ -84,11 +84,11 @@ fun NewsCard(
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.space_medium)))
             Box( modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(16f / 9f)
-                .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+                .clip(RoundedCornerShape(topStart = dimensionResource(id = R.dimen.box_corner_radius), topEnd = dimensionResource(id = R.dimen.box_corner_radius)))
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(context)
@@ -108,11 +108,11 @@ fun NewsCard(
                     CircularProgressIndicator(
                         modifier = Modifier
                             .align(Alignment.Center)
-                            .size(40.dp)
+                            .size(dimensionResource(id = R.dimen.image_circular_loader))
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.space_medium)))
             Text(
                 text = stringResource(R.string.author) + authorText,
                 style = MaterialTheme.typography.labelSmall,
@@ -125,14 +125,14 @@ fun NewsCard(
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.space_small)))
             Text(
                 text = publishedAtText.formatAsDate(),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.space_small)))
             Text(
                 text = descriptionText,
                 maxLines = 4,
@@ -141,7 +141,7 @@ fun NewsCard(
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.space_small)))
             Text(
                 text = stringResource(R.string.read_more),
                 modifier = Modifier

@@ -27,9 +27,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.newsappv2.R
 import com.example.newsappv2.util.Category
 import com.example.newsappv2.viewmodel.AppViewModelProvider
 import com.example.newsappv2.viewmodel.CategoryViewModel
@@ -49,38 +50,38 @@ fun DrawerContainerForCategories(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet(
-                modifier = Modifier.widthIn(max = 260.dp)
+                modifier = Modifier.widthIn(max = dimensionResource(id = R.dimen.drawer_max_width))
             ) {
                 Category.entries.forEach { category ->
                     val selected = category == selectedCategory
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 4.dp, horizontal = 8.dp)
-                            .clip(RoundedCornerShape(8.dp))
+                            .padding(vertical = dimensionResource(id = R.dimen.padding_small), horizontal = dimensionResource(id = R.dimen.padding_default))
+                            .clip(RoundedCornerShape(dimensionResource(id = R.dimen.drawer_corner_shape)))
                             .background(
                                 if (selected) MaterialTheme.colorScheme.primaryContainer else Color.Transparent
                             )
                             .border(
-                                1.dp,
+                                dimensionResource(id = R.dimen.drawer_border),
                                 if (selected) MaterialTheme.colorScheme.primary else Color.Transparent,
-                                RoundedCornerShape(8.dp)
+                                RoundedCornerShape(dimensionResource(id = R.dimen.drawer_corner_shape))
                             )
                             .clickable {
                                 viewModel.onCategorySelected(category)
                                 viewModel.persistLastSelectedCategory(category)
                                 scope.launch { drawerState.close() }
                             }
-                            .padding(12.dp),
+                            .padding(dimensionResource(id = R.dimen.padding_medium)),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
                             painter = painterResource(id = category.categoryImage),
                             contentDescription = category.categoryName,
                             tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.size(dimensionResource(id = R.dimen.image_icon_size))
                         )
-                        Spacer(modifier = Modifier.width(12.dp))
+                        Spacer(modifier = Modifier.width(dimensionResource(R.dimen.drawer_spacer)))
                         Text(
                             text = category.categoryName,
                             style = MaterialTheme.typography.labelLarge,

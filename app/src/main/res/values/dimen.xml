@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="padding_zero">0dp</dimen>
+    <dimen name="padding_small">4dp</dimen>
+    <dimen name="padding_default">8dp</dimen>
+    <dimen name="padding_medium">12dp</dimen>
+    <dimen name="padding_large">16dp</dimen>
+
+    <dimen name="space_small">4dp</dimen>
+    <dimen name="space_medium">8dp</dimen>
+    <dimen name="space_large">16dp</dimen>
+
+    <dimen name="card_corner_radius">12dp</dimen>
+    <dimen name="card_border_width">2dp</dimen>
+    <dimen name="card_elevation">6dp</dimen>
+
+    <dimen name="box_corner_radius">8dp</dimen>
+
+    <dimen name="image_error_icon_size">120dp</dimen>
+    <dimen name="image_icon_size">24dp</dimen>
+    <dimen name="image_circular_loader">40dp</dimen>
+
+
+    <dimen name="bottom_bar_icon_size">36dp</dimen>
+    <dimen name="bottom_bar_box_border">1dp</dimen>
+    <dimen name="bottom_bar_item_padding_vertical">12dp</dimen>
+    <dimen name="bottom_bar_item_padding_horizontal">16dp</dimen>
+    <dimen name="bottom_bar_total_elevation">8dp</dimen>
+
+    <dimen name="outlined_text_field_height">56dp</dimen>
+
+    <dimen name="previous_query_border">1dp</dimen>
+    <dimen name="previous_query_corner_shape">4dp</dimen>
+
+
+    <dimen name="drawer_max_width">260dp</dimen>
+    <dimen name="drawer_corner_shape">8dp</dimen>
+    <dimen name="drawer_border">1dp</dimen>
+    <dimen name="drawer_spacer">12dp</dimen>
+</resources>

@@ -4,10 +4,11 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.newsappv2.R
 import com.example.newsappv2.data.model.Article
 import com.example.newsappv2.navigation.NavigationDestination
 import com.example.newsappv2.ui.components.NewsCard
@@ -22,7 +23,7 @@ object CategoriesDestination: NavigationDestination {
 @Composable
 fun CategoriesScreen(
     viewModel: CategoryViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    contentPadding: PaddingValues = PaddingValues(0.dp),
+    contentPadding: PaddingValues = PaddingValues(dimensionResource(id = R.dimen.padding_zero)),
     modifier: Modifier = Modifier
 ) {
     val newsCategoryItems = viewModel.newsCategoryPagingFlow.collectAsLazyPagingItems()
@@ -38,7 +39,7 @@ fun CategoriesScreen(
 fun CategoryNewsLazyPagingList(
     newsCategoryItems: LazyPagingItems<Article>,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp)
+    contentPadding: PaddingValues = PaddingValues(dimensionResource(id = R.dimen.padding_zero))
 ) {
     LazyColumn(
         modifier = modifier,
