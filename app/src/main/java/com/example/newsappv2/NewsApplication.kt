@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.newsappv2.data.AppContainer
@@ -28,12 +27,6 @@ class NewsApplication : Application() {
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val oneTimeWorkRequest = OneTimeWorkRequestBuilder<NewsCheckWorker>()
-            .setInitialDelay(10, TimeUnit.SECONDS)
-            .setConstraints(constraints)
-            .build()
-
-        WorkManager.getInstance(this).enqueue(oneTimeWorkRequest)
 
         val periodicWorkRequest = PeriodicWorkRequestBuilder<NewsCheckWorker>(
             6, TimeUnit.HOURS
