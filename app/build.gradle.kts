@@ -10,7 +10,18 @@ plugins {
 
 
 val localProperties = Properties()
-val localPropertiesFile = rootProject.file("apikey.properties")
+val localPropertiesFile = rootProject.file("apikey.package com.example.newsappv2.util\n" +
+        "\n" +
+        "import androidx.compose.runtime.Composable\n" +
+        "import androidx.compose.runtime.getValue\n" +
+        "import androidx.navigation.NavHostController\n" +
+        "import androidx.navigation.compose.currentBackStackEntryAsState\n" +
+        "\n" +
+        "@Composable\n" +
+        "fun currentRoute(navController: NavHostController): String? {\n" +
+        "    val navBackStackEntry by navController.currentBackStackEntryAsState()\n" +
+        "    return navBackStackEntry?.destination?.route\n" +
+        "}")
 
 if (localPropertiesFile.exists()) {
     localProperties.load(FileInputStream(localPropertiesFile))

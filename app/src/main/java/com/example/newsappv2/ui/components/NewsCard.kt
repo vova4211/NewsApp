@@ -47,6 +47,7 @@ import com.example.newsappv2.util.formatAsDate
 fun NewsCard(
     modifier: Modifier = Modifier,
     article: Article,
+    onClick: () -> Unit,
 ) {
     val urlToImageText = article.urlToImage?.replace("http://", "https://")
     val urlText = article.url?.replace("http://", "https://")
@@ -88,7 +89,12 @@ fun NewsCard(
             Box( modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(16f / 9f)
-                .clip(RoundedCornerShape(topStart = dimensionResource(id = R.dimen.box_corner_radius), topEnd = dimensionResource(id = R.dimen.box_corner_radius)))
+                .clip(
+                    RoundedCornerShape(
+                        topStart = dimensionResource(id = R.dimen.box_corner_radius),
+                        topEnd = dimensionResource(id = R.dimen.box_corner_radius)
+                    )
+                )
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(context)
@@ -147,8 +153,7 @@ fun NewsCard(
                 modifier = Modifier
                     .align(Alignment.End)
                     .clickable {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlText))
-                        context.startActivity(intent)
+                        onClick()
                     },
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -181,7 +186,8 @@ fun NewsCardPreview(
 
         NewsCard(
             article = mockData,
-            modifier = Modifier
+            modifier = Modifier,
+            onClick = { }
         )
     }
 }

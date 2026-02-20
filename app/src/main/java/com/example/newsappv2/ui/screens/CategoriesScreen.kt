@@ -50,7 +50,8 @@ fun CategoryNewsLazyPagingList(
             val article = newsCategoryItems[index]
             article?.let {
                 NewsCard(
-                    article = it
+                    article = it,
+                    onClick = {},
                 )
             }
         }

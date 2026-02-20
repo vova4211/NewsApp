@@ -22,6 +22,7 @@ import com.example.newsappv2.ui.components.OutlinedTextFieldHomeScreen
 import com.example.newsappv2.util.PagingLoadStateHandler
 import com.example.newsappv2.viewmodel.AppViewModelProvider
 import com.example.newsappv2.viewmodel.HomeViewModel
+import java.net.URLEncoder
 
 
 object HomeDestination: NavigationDestination {
@@ -31,6 +32,7 @@ object HomeDestination: NavigationDestination {
 
 @Composable
 fun HomeScreen(
+    onArticleClicked: (String) -> Unit,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
     contentPadding: PaddingValues = PaddingValues(dimensionResource(id = R.dimen.padding_zero)),
     modifier: Modifier = Modifier
@@ -49,6 +51,7 @@ fun HomeScreen(
             viewModel.persistLastSearchQuery(it)
         },
         onUseLastQuery = { viewModel.onSearchTextChanged(it)},
+        onArticleClicked = onArticleClicked,
         modifier = modifier,
         contentPadding =contentPadding
     )
@@ -59,6 +62,7 @@ fun HomeNewsLazyPagingList(
     newsItems: LazyPagingItems<Article>,
     searchQuery: String,
     lastQuery: String,
+    onArticleClicked: (String) -> Unit,
     onSearchTextChange: (String) -> Unit,
     onUseLastQuery: (String) -> Unit,
     modifier: Modifier =  Modifier,
@@ -88,7 +92,11 @@ fun HomeNewsLazyPagingList(
                 val article = newsItems[index]
                 article?.let {
                     NewsCard(
-                        article = it
+                        article = it,
+                        onClick = {
+                            val url = it.url ?: return@NewsCard
+                            onArticleClicked(url)
+                        }
                     )
                 }
             }
