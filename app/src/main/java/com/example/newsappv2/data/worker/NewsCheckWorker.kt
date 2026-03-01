@@ -4,18 +4,24 @@ import android.content.Context
 import android.util.Log
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.newsappv2.NewsApplication
 import com.example.newsappv2.data.local.datastore.dataStore
+import com.example.newsappv2.data.repository.NewsRepository
 import com.example.newsappv2.util.Constants.DEFAULT_QUERY
 import com.example.newsappv2.util.notifications.NotificationHelper
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.first
 import retrofit2.HttpException
 
-class NewsCheckWorker(
-    private val context: Context,
-    workerParams: WorkerParameters
+@HiltWorker
+class NewsCheckWorker @AssistedInject constructor(
+    @Assisted private val context: Context,
+    @Assisted workerParams: WorkerParameters,
+    private val newsRepository: NewsRepository,
 ) : CoroutineWorker(context, workerParams) {
 
     private val TAG = "NewsCheckWorker"
@@ -23,11 +29,10 @@ class NewsCheckWorker(
     private val LAST_ARTICLE_DATE_KEY = stringPreferencesKey("last_article_date")
 
     override suspend fun doWork(): Result {
-        val appContainer = ( context.applicationContext as NewsApplication).container
         val dataStore = context.dataStore
 
         try {
-            val response = appContainer.newsRepository.searchNews(query = DEFAULT_QUERY)
+            val response = newsRepository.searchNews(query = DEFAULT_QUERY)
 
             if (response.isSuccessful) {
                 val body = response.body()

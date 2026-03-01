@@ -24,5 +24,11 @@ interface ArticleDao {
     @Query("DELETE FROM articles WHERE type = 'category' AND category = :category")
     suspend fun clearCategoryNews(category: String)
 
+    @Query("UPDATE articles SET full_text = :fullText WHERE url = :url")
+    suspend fun updateArticleFullText(url: String, fullText: String)
 
+    @Query("UPDATE articles SET translated_text = :translatedText, translated_title = :translatedTitle WHERE url = :url")
+    suspend fun updateArticleTranslation(url: String, translatedText: String, translatedTitle: String)
+    @Query("SELECT * FROM articles WHERE url = :url LIMIT 1")
+    fun getArticleByUrl(url: String): kotlinx.coroutines.flow.Flow<ArticleEntity>
 }

@@ -4,12 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.map
-import com.example.newsappv2.data.local.datastore.UserPreferencesDataStore
-import com.example.newsappv2.data.model.Article
-import com.example.newsappv2.data.repository.NewsRepository
+import com.example.newsappv2.domain.model.Article
+import com.example.newsappv2.domain.usecase.GetSavedQueryUseCase
+import com.example.newsappv2.domain.usecase.GetSearchNewsUseCase
+import com.example.newsappv2.domain.usecase.SaveQueryUseCase
 import com.example.newsappv2.util.Constants.DEFAULT_QUERY
-import com.example.newsappv2.util.toArticle
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,12 +23,14 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
+@HiltViewModel
 @OptIn(FlowPreview::class)
-class HomeViewModel(
-    private val repository: NewsRepository,
-    private val userPreferencesDataStore: UserPreferencesDataStore
+class HomeViewModel @Inject constructor(
+    private val getSearchNewsUseCase: GetSearchNewsUseCase,
+    private val getSavedQueryUseCase: GetSavedQueryUseCase,
+    private val saveQueryUseCase: SaveQueryUseCase,
 ) : ViewModel() {
 
     private val _searchQuery  = MutableStateFlow("")
@@ -40,7 +42,7 @@ class HomeViewModel(
 
     init {
         viewModelScope.launch {
-            userPreferencesDataStore.searchQuery.collectLatest { query ->
+            getSavedQueryUseCase().collectLatest { query ->
                 _lastSearchQuery.value = query
             }
         }
@@ -51,14 +53,9 @@ class HomeViewModel(
         _searchQuery
             .debounce(500)
             .distinctUntilChanged()
-            .map { query ->
-                if(query.isBlank()) defaultQuery else query
-            }
+            .map { query -> if(query.isBlank()) defaultQuery else query }
             .flatMapLatest { query ->
-                repository.getSearchNewsPager(query)
-                    .map { pagingData ->
-                        pagingData.map { it.toArticle() }
-                    }
+                getSearchNewsUseCase(query)
             }
             .cachedIn(viewModelScope)
             .stateIn(
@@ -73,7 +70,7 @@ class HomeViewModel(
 
     fun persistLastSearchQuery(searchQuery : String) {
         viewModelScope.launch {
-            userPreferencesDataStore.saveLastQuery(searchQuery)
+            saveQueryUseCase(searchQuery)
         }
     }
 }

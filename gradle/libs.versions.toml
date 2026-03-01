@@ -21,8 +21,26 @@ navigationRuntimeAndroid = "2.9.0"
 navigationComposeAndroid = "2.9.0"
 engageCore = "1.5.8"
 uiTextGoogleFonts = "1.8.3"
+hilt = "2.55"
+hiltNavigationCompose = "1.2.0"
+hiltWork = "1.2.0"
+mlkitTranslate = "17.0.2"
+jsoup = "1.17.2"
+foundationLayout = "1.10.3"
 
 [libraries]
+# Hilt (Core + Navigation Compose + WorkManager)
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltWork" }
+hilt-ext-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltWork" }
+coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutines" }
+# Google ML Kit (On-device Translation)
+mlkit-translate = { group = "com.google.mlkit", name = "translate", version.ref = "mlkitTranslate" }
+
+# Jsoup (Для парсингу HTML-сторінок новин)
+jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup" }
 room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
@@ -56,8 +74,10 @@ androidx-navigation-runtime-android = { group = "androidx.navigation", name = "n
 androidx-navigation-compose-android = { group = "androidx.navigation", name = "navigation-compose-android", version.ref = "navigationComposeAndroid" }
 engage-core = { group = "com.google.android.engage", name = "engage-core", version.ref = "engageCore" }
 androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
+androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
 
 [plugins]
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version = "2.1.21-2.0.2" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

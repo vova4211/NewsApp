@@ -1,7 +1,5 @@
 package com.example.newsappv2.ui.components
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -37,9 +35,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.newsappv2.domain.model.Article
 import com.example.newsappv2.R
-import com.example.newsappv2.data.model.Article
-import com.example.newsappv2.data.model.Source
 import com.example.newsappv2.ui.theme.NewsAppV2Theme
 import com.example.newsappv2.util.formatAsDate
 
@@ -49,16 +46,16 @@ fun NewsCard(
     article: Article,
     onClick: () -> Unit,
 ) {
-    val urlToImageText = article.urlToImage?.replace("http://", "https://")
-    val urlText = article.url?.replace("http://", "https://")
-    val authorText = article.author ?: stringResource(R.string.author_unknown)
-    val titleText = article.title ?: stringResource(R.string.title_unknown)
-    val descriptionText = article.description ?: stringResource(R.string.unknown_description)
-    val nameText = article.source.name ?: stringResource(R.string.unknown_source)
-    val publishedAtText = article.publishedAt ?: stringResource(R.string.unknown_when_published)
+    val urlToImageText = article.urlToImage.replace("http://", "https://")
+    val urlText = article.url.replace("http://", "https://")
+    val authorText = article.author
+    val titleText = article.title
+    val descriptionText = article.description
+    val nameText = article.sourceName
+    val publishedAtText = article.publishedAt
     val context = LocalContext.current
 
-    var isLoading by remember { mutableStateOf(!urlToImageText.isNullOrBlank()) }
+    var isLoading by remember { mutableStateOf(urlToImageText.isNotBlank()) }
 
 
     Card(
@@ -172,10 +169,7 @@ fun NewsCardPreview(
     NewsAppV2Theme{
         val mockData =
             Article(
-                source = Source(
-                    id = null,
-                    name = "BBC News"
-                ),
+                sourceName = "BBC News",
                 author = "BBC News",
                 title = "Small boats situation getting worse, says No 10",
                 url = "https://www.bbc.co.uk/news/articles/c39zk7pp29ko",

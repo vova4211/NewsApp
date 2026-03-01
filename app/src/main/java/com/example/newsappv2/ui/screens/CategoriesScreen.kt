@@ -5,15 +5,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.newsappv2.R
-import com.example.newsappv2.data.model.Article
+import com.example.newsappv2.domain.model.Article
 import com.example.newsappv2.navigation.NavigationDestination
 import com.example.newsappv2.ui.components.NewsCard
 import com.example.newsappv2.util.PagingLoadStateHandler
-import com.example.newsappv2.viewmodel.AppViewModelProvider
 import com.example.newsappv2.viewmodel.CategoryViewModel
 
 
@@ -22,7 +20,8 @@ object CategoriesDestination: NavigationDestination {
 }
 @Composable
 fun CategoriesScreen(
-    viewModel: CategoryViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    onArticleClicked: (String) -> Unit,
+    viewModel: CategoryViewModel,
     contentPadding: PaddingValues = PaddingValues(dimensionResource(id = R.dimen.padding_zero)),
     modifier: Modifier = Modifier
 ) {
@@ -30,6 +29,7 @@ fun CategoriesScreen(
 
     CategoryNewsLazyPagingList(
         newsCategoryItems = newsCategoryItems,
+        onArticleClicked = onArticleClicked,
         modifier = modifier,
         contentPadding =contentPadding
     )
@@ -38,6 +38,7 @@ fun CategoriesScreen(
 @Composable
 fun CategoryNewsLazyPagingList(
     newsCategoryItems: LazyPagingItems<Article>,
+    onArticleClicked: (String) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(dimensionResource(id = R.dimen.padding_zero))
 ) {
@@ -51,7 +52,7 @@ fun CategoryNewsLazyPagingList(
             article?.let {
                 NewsCard(
                     article = it,
-                    onClick = {},
+                    onClick = { onArticleClicked(it.url) },
                 )
             }
         }

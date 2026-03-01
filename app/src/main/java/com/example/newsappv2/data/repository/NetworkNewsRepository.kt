@@ -27,6 +27,8 @@ class NetworkNewsRepository(
     override fun getCategoryNewsFromDb(category: String): PagingSource<Int, ArticleEntity> =
         database.articleDao().getCategoryNews(category)
 
+    override fun getArticleByUrl(url: String) = database.articleDao().getArticleByUrl(url)
+
     override suspend fun clearHomeNews(query: String) = database.articleDao().clearHomeNews(query)
     override suspend fun clearCategoryNews(category: String) =
         database.articleDao().clearCategoryNews(category)
@@ -34,6 +36,13 @@ class NetworkNewsRepository(
     override suspend fun insertArticles(articles: List<ArticleEntity>) =
         database.articleDao().insertArticles(articles)
 
+    override suspend fun updateArticleFullText(url: String, fullText: String) {
+        database.articleDao().updateArticleFullText(url, fullText)
+    }
+
+    override suspend fun updateArticleTranslation(url: String, translatedText: String, translatedTitle: String) {
+        database.articleDao().updateArticleTranslation(url, translatedText, translatedTitle)
+    }
 
     override suspend fun searchNews(
         query: String?,

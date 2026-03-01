@@ -20,16 +20,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.newsappv2.R
-import com.example.newsappv2.viewmodel.AppViewModelProvider
 import com.example.newsappv2.viewmodel.CategoryViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoriesTopBarWithDrawerButton(
     onDrawerClick: () -> Unit,
-    viewModel: CategoryViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    viewModel: CategoryViewModel = hiltViewModel(),
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier
 

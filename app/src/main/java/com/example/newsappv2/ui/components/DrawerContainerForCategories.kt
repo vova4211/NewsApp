@@ -29,17 +29,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.newsappv2.R
 import com.example.newsappv2.util.Category
-import com.example.newsappv2.viewmodel.AppViewModelProvider
 import com.example.newsappv2.viewmodel.CategoryViewModel
 import kotlinx.coroutines.launch
 
 
 @Composable
 fun DrawerContainerForCategories(
-    viewModel: CategoryViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    viewModel: CategoryViewModel = hiltViewModel(),
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
     content: @Composable () -> Unit
 ) {

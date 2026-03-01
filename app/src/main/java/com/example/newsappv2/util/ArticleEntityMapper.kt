@@ -1,17 +1,19 @@
 package com.example.newsappv2.util
 
 import com.example.newsappv2.data.local.db.entities.ArticleEntity
-import com.example.newsappv2.data.model.Article
-import com.example.newsappv2.data.model.Source
+import com.example.newsappv2.domain.model.Article
 
-fun ArticleEntity.toArticle(): Article {
+fun ArticleEntity.toDomainArticle(): Article {
     return Article(
-        source = Source(id = null, name = this.sourceName),
-        author = this.author,
-        title = this.title,
-        description = this.description,
-        url = this.url,
-        urlToImage = this.urlToImage,
-        publishedAt = this.publishedAt
+        title = this.title ?: "Unknown Title",
+        description = this.description ?: "",
+        author = this.author ?: "Unknown Author",
+        sourceName = this.sourceName ?: "Unknown Source",
+        url = this.url ?: "",
+        urlToImage = this.urlToImage ?: "",
+        publishedAt = this.publishedAt ?: "",
+        fullText = this.fullText,
+        translatedText = this.translatedText,
+        translatedTitle = this.translatedTitle,
     )
 }

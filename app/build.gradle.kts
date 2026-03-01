@@ -6,22 +6,12 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 
 val localProperties = Properties()
-val localPropertiesFile = rootProject.file("apikey.package com.example.newsappv2.util\n" +
-        "\n" +
-        "import androidx.compose.runtime.Composable\n" +
-        "import androidx.compose.runtime.getValue\n" +
-        "import androidx.navigation.NavHostController\n" +
-        "import androidx.navigation.compose.currentBackStackEntryAsState\n" +
-        "\n" +
-        "@Composable\n" +
-        "fun currentRoute(navController: NavHostController): String? {\n" +
-        "    val navBackStackEntry by navController.currentBackStackEntryAsState()\n" +
-        "    return navBackStackEntry?.destination?.route\n" +
-        "}")
+val localPropertiesFile = rootProject.file("apikey.properties")
 
 if (localPropertiesFile.exists()) {
     localProperties.load(FileInputStream(localPropertiesFile))
@@ -29,7 +19,7 @@ if (localPropertiesFile.exists()) {
 
 android {
     namespace = "com.example.newsappv2"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.newsappv2"
@@ -79,6 +69,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose.android)
     implementation(libs.engage.core)
     implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.androidx.compose.foundation.layout)
     ksp(libs.room.compiler)
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
@@ -100,4 +91,19 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    // Hilt DI
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
+
+    // Hilt для WorkManager
+    implementation(libs.hilt.work)
+    ksp(libs.hilt.ext.compiler)
+
+    // ML Kit Translation
+    implementation(libs.mlkit.translate)
+
+    // Jsoup
+    implementation(libs.jsoup)
+    implementation(libs.coroutines.play.services)
 }

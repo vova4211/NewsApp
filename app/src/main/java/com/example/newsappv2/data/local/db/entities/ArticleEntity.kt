@@ -27,6 +27,12 @@ data class ArticleEntity(
     @ColumnInfo(name = "query")
     val query: String?,
     @ColumnInfo(name = "type")
-    val type: String
+    val type: String,
+    @ColumnInfo(name = "full_text")
+    val fullText: String? = null,
+    @ColumnInfo(name = "translated_text")
+    val translatedText: String? = null,
+    @ColumnInfo(name = "translated_title")
+    val translatedTitle: String? = null,
 
 )

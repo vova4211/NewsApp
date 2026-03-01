@@ -1,41 +1,43 @@
 package com.example.newsappv2
 
 import android.app.Application
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.Configuration
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.example.newsappv2.data.AppContainer
-import com.example.newsappv2.data.local.datastore.UserPreferencesDataStore
-import com.example.newsappv2.data.local.datastore.dataStore
 import com.example.newsappv2.data.worker.NewsCheckWorker
-import com.example.newsappv2.di.DefaultAppContainer
+import dagger.hilt.android.HiltAndroidApp
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class NewsApplication : Application() {
-    lateinit var container: AppContainer
-    lateinit var userPreferencesDataStore: UserPreferencesDataStore
+@HiltAndroidApp
+class NewsApplication : Application(), Configuration.Provider {
+
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
+
+    override val  workManagerConfiguration: Configuration
+        get() = Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
 
     override fun onCreate() {
         super.onCreate()
-        container = DefaultAppContainer(this)
-        userPreferencesDataStore = UserPreferencesDataStore(dataStore)
-
-
+        setupWorkManager()
+    }
+    private fun setupWorkManager() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-
-        val periodicWorkRequest = PeriodicWorkRequestBuilder<NewsCheckWorker>(
-            6, TimeUnit.HOURS
-        )
+        val periodicWorkRequest = PeriodicWorkRequestBuilder<NewsCheckWorker>( 6, TimeUnit.HOURS)
             .setConstraints(constraints)
             .build()
 
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-            "NewsCheckWork",
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork("NewsCheckWork",
             ExistingPeriodicWorkPolicy.KEEP,
             periodicWorkRequest
         )

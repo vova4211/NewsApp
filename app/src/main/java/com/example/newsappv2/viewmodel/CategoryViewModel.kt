@@ -4,12 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.map
-import com.example.newsappv2.data.local.datastore.UserPreferencesDataStore
-import com.example.newsappv2.data.model.Article
-import com.example.newsappv2.data.repository.NewsRepository
+import com.example.newsappv2.domain.model.Article
+import com.example.newsappv2.domain.usecase.GetCategoryNewsUseCase
+import com.example.newsappv2.domain.usecase.GetSavedCategoryUseCase
+import com.example.newsappv2.domain.usecase.SaveCategoryUseCase
 import com.example.newsappv2.util.Category
-import com.example.newsappv2.util.toArticle
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,13 +20,16 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CategoryViewModel(
-    private val repository: NewsRepository,
-    private val userPreferencesDataStore: UserPreferencesDataStore
+
+@HiltViewModel
+class CategoryViewModel @Inject constructor(
+    private val getCategoryNewsUseCase: GetCategoryNewsUseCase,
+    private val getSavedCategoryUseCase: GetSavedCategoryUseCase,
+    private val saveCategoryUseCase: SaveCategoryUseCase,
 ) : ViewModel() {
 
     private val _selectCategory = MutableStateFlow(Category.BUSINESS)
@@ -35,7 +38,7 @@ class CategoryViewModel(
 
     init {
         viewModelScope.launch {
-            userPreferencesDataStore.selectCategory.collectLatest { category ->
+            getSavedCategoryUseCase().collectLatest { category ->
                 _selectCategory.value = category
             }
         }
@@ -47,10 +50,7 @@ class CategoryViewModel(
             .debounce(500)
             .distinctUntilChanged()
             .flatMapLatest { category ->
-                repository.getCategoryNewsPager(category.categoryName.lowercase())
-                    .map { pagingData ->
-                        pagingData.map { it.toArticle() }
-                    }
+                getCategoryNewsUseCase(category.categoryName.lowercase())
             }
             .cachedIn(viewModelScope)
             .stateIn(
@@ -65,7 +65,7 @@ class CategoryViewModel(
 
     fun persistLastSelectedCategory(category: Category) {
         viewModelScope.launch {
-            userPreferencesDataStore.saveSelectedCategory(category)
+            saveCategoryUseCase(category)
         }
     }
 }

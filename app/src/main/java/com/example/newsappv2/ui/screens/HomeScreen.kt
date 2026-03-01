@@ -11,18 +11,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.newsappv2.R
-import com.example.newsappv2.data.model.Article
+import com.example.newsappv2.domain.model.Article
 import com.example.newsappv2.navigation.NavigationDestination
 import com.example.newsappv2.ui.components.NewsCard
 import com.example.newsappv2.ui.components.OutlinedTextFieldHomeScreen
 import com.example.newsappv2.util.PagingLoadStateHandler
-import com.example.newsappv2.viewmodel.AppViewModelProvider
 import com.example.newsappv2.viewmodel.HomeViewModel
-import java.net.URLEncoder
 
 
 object HomeDestination: NavigationDestination {
@@ -33,7 +30,7 @@ object HomeDestination: NavigationDestination {
 @Composable
 fun HomeScreen(
     onArticleClicked: (String) -> Unit,
-    viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    viewModel: HomeViewModel,
     contentPadding: PaddingValues = PaddingValues(dimensionResource(id = R.dimen.padding_zero)),
     modifier: Modifier = Modifier
 ) {
@@ -94,7 +91,7 @@ fun HomeNewsLazyPagingList(
                     NewsCard(
                         article = it,
                         onClick = {
-                            val url = it.url ?: return@NewsCard
+                            val url = it.url
                             onArticleClicked(url)
                         }
                     )

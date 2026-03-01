@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.newsappv2.navigation.NewsNavHost
 import com.example.newsappv2.ui.components.CategoriesTopBarWithDrawerButton
@@ -17,9 +16,6 @@ import com.example.newsappv2.ui.components.DrawerContainerForCategories
 import com.example.newsappv2.ui.components.HomeTopBar
 import com.example.newsappv2.ui.components.NewsBottomBar
 import com.example.newsappv2.util.currentRoute
-import com.example.newsappv2.viewmodel.AppViewModelProvider
-import com.example.newsappv2.viewmodel.CategoryViewModel
-import com.example.newsappv2.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
 
 
@@ -28,11 +24,10 @@ import kotlinx.coroutines.launch
 fun RootScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModelHome: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    viewModelCategory: CategoryViewModel = viewModel(factory = AppViewModelProvider.Factory),
 
     ) {
     val currentRoute = currentRoute(navController)
+    val showBottomBar = currentRoute == HomeDestination.route || currentRoute == CategoriesDestination.route
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val onTabSelected: (String) -> Unit = { route ->
@@ -52,13 +47,11 @@ fun RootScreen(
     val categoriesScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     if (currentRoute == CategoriesDestination.route) {
         DrawerContainerForCategories(
-            viewModel = viewModelCategory,
             drawerState = drawerState,
             content = {
                 Scaffold(
                     topBar = {
                         CategoriesTopBarWithDrawerButton(
-                            viewModel = viewModelCategory,
                             scrollBehavior = categoriesScrollBehavior,
                             onDrawerClick = {
                                 scope.launch {
@@ -68,16 +61,16 @@ fun RootScreen(
                         )
                     },
                     bottomBar = {
-                        NewsBottomBar(
-                            currentRoute = currentRoute,
-                            onTabSelected = onTabSelected
-                        )
+                        if (showBottomBar) {
+                            NewsBottomBar(
+                                currentRoute = currentRoute,
+                                onTabSelected = onTabSelected
+                            )
+                        }
                     },
                     modifier = modifier
                 ) { innerPadding ->
                     NewsNavHost(
-                        viewModelCategory = viewModelCategory,
-                        viewModelHome = viewModelHome,
                         contentPadding = innerPadding,
                         navController = navController
                     )
@@ -86,21 +79,25 @@ fun RootScreen(
         )
     } else {
         Scaffold(
-            topBar = { HomeTopBar(
+            topBar = {
+                if (currentRoute == HomeDestination.route) {
+                HomeTopBar(
                 scrollBehavior = homeScrollBehavior
-            ) },
+            )
+                }
+                     },
             bottomBar = {
-                NewsBottomBar(
-                    currentRoute = currentRoute,
-                    onTabSelected = onTabSelected
-                )
+                if (showBottomBar) {
+                    NewsBottomBar(
+                        currentRoute = currentRoute,
+                        onTabSelected = onTabSelected
+                    )
+                }
             },
             modifier = Modifier.nestedScroll(homeScrollBehavior.nestedScrollConnection)
 
         ) { innerPadding ->
             NewsNavHost(
-                viewModelCategory = viewModelCategory,
-                viewModelHome = viewModelHome,
                 contentPadding = innerPadding,
                 navController = navController
             )

@@ -25,15 +25,17 @@ interface NewsRepository {
         page: Int = 1
     ) : Response<NewsResponse>
 
+    fun getArticleByUrl(url: String): kotlinx.coroutines.flow.Flow<ArticleEntity>
     fun getSearchNewsPager(query: String) : Flow<PagingData<ArticleEntity>>
-
     fun getCategoryNewsPager(category: String): Flow<PagingData<ArticleEntity>>
-
     fun getHomeNewsFromDb(query: String) : PagingSource<Int, ArticleEntity>
     fun getCategoryNewsFromDb(category: String) : PagingSource<Int, ArticleEntity>
     suspend fun clearHomeNews(query: String)
     suspend fun clearCategoryNews(category: String)
     suspend fun insertArticles(articles: List<ArticleEntity>)
 
+    suspend fun updateArticleFullText(url: String, fullText: String)
+
+    suspend fun updateArticleTranslation(url: String, translatedText: String, translatedTitle: String)
 
 }
