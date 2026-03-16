@@ -51,7 +51,7 @@ class HomeViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val homeNewsPagingFlow: StateFlow<PagingData<Article>> =
         _searchQuery
-            .debounce(500)
+            .debounce(1200)
             .distinctUntilChanged()
             .map { query -> if(query.isBlank()) defaultQuery else query }
             .flatMapLatest { query ->

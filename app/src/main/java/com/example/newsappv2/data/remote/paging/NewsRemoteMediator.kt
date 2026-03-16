@@ -57,22 +57,19 @@ class NewsRemoteMediator(
 
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    if (category != null) {
-                        repository.clearCategoryNews(category)
-                    } else if (query != null) {
-                        repository.clearHomeNews(query)
-                    }
+                    repository.clearUnsavedArticles()
                 }
+                val entities = articles.mapNotNull { article ->
+                    val validUrl = article.url ?: return@mapNotNull null
 
-                val entities = articles.map {
                     ArticleEntity(
-                        sourceName = it.source.name,
-                        author = it.author,
-                        title = it.title,
-                        description = it.description,
-                        url = it.url,
-                        urlToImage = it.urlToImage,
-                        publishedAt = it.publishedAt,
+                        sourceName = article.source.name,
+                        author = article.author,
+                        title = article.title,
+                        description = article.description,
+                        url = validUrl,
+                        urlToImage = article.urlToImage,
+                        publishedAt = article.publishedAt,
                         category = category,
                         query = query,
                         type = if (category != null) "category" else "search"

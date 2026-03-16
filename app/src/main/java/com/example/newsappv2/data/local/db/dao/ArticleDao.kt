@@ -9,8 +9,8 @@ import com.example.newsappv2.data.local.db.entities.ArticleEntity
 
 @Dao
 interface ArticleDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertArticles(articles:(List<ArticleEntity>))
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertArticles(articles: List<ArticleEntity>)
 
     @Query("SELECT * FROM articles WHERE type = 'search' AND `query` = :query")
     fun getHomeNews(query: String): PagingSource<Int, ArticleEntity>
@@ -29,6 +29,11 @@ interface ArticleDao {
 
     @Query("UPDATE articles SET translated_text = :translatedText, translated_title = :translatedTitle WHERE url = :url")
     suspend fun updateArticleTranslation(url: String, translatedText: String, translatedTitle: String)
+
     @Query("SELECT * FROM articles WHERE url = :url LIMIT 1")
     fun getArticleByUrl(url: String): kotlinx.coroutines.flow.Flow<ArticleEntity>
+
+    // НАШ НОВИЙ МЕТОД ДЛЯ РОЗУМНОГО ОЧИЩЕННЯ
+    @Query("DELETE FROM articles WHERE full_text IS NULL AND translated_text IS NULL")
+    suspend fun clearUnsavedArticles()
 }

@@ -102,7 +102,7 @@ dependencies {
 
     // ML Kit Translation
     implementation(libs.mlkit.translate)
-
+    implementation(libs.mlkit.language.id)
     // Jsoup
     implementation(libs.jsoup)
     implementation(libs.coroutines.play.services)

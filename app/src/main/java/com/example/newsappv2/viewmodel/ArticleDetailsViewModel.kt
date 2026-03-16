@@ -7,6 +7,7 @@ import com.example.newsappv2.data.repository.NewsRepository
 import com.example.newsappv2.domain.model.Article
 import com.example.newsappv2.domain.usecase.DownloadArticleFullTextUseCase
 import com.example.newsappv2.domain.usecase.TranslateArticleUseCase
+import com.example.newsappv2.util.NetworkMonitor
 import com.example.newsappv2.util.toDomainArticle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +25,8 @@ class ArticleDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     repository: NewsRepository,
     private val downloadArticleFullTextUseCase: DownloadArticleFullTextUseCase,
-    private val translateArticleUseCase: TranslateArticleUseCase
+    private val translateArticleUseCase: TranslateArticleUseCase,
+    private val networkMonitor: NetworkMonitor,
 ) : ViewModel() {
 
     private val encodedUrl: String = checkNotNull(savedStateHandle["encodedUrl"])
@@ -53,13 +55,20 @@ class ArticleDetailsViewModel @Inject constructor(
 
     private fun downloadFullTextIfNeeded() {
         viewModelScope.launch {
+            if (!networkMonitor.isOnline()) {
+                return@launch
+            }
+
             _isLoading.value = true
             _error.value = null
 
             val result = downloadArticleFullTextUseCase(articleUrl)
 
             if (result.isFailure) {
-                _error.value = result.exceptionOrNull()?.message ?: "Помилка завантаження тексту"
+                val currentArticle = article.value
+                if (currentArticle?.fullText == null && currentArticle?.description.isNullOrBlank()) {
+                    _error.value = "Немає підключення до мережі. Перевірте інтернет."
+                }
             }
             _isLoading.value = false
         }

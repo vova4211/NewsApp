@@ -55,7 +55,7 @@ fun ArticleDetailsScreen(
             )
         },
         floatingActionButton = {
-            if (article?.fullText != null) {
+            if (article != null) {
                 ExtendedFloatingActionButton(
                     onClick = {
                         if (!hasTranslation) {

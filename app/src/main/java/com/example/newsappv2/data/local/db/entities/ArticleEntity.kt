@@ -6,8 +6,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "articles")
 data class ArticleEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(name = "url")
+    val url: String,
     @ColumnInfo(name = "source_name")
     val sourceName: String?,
     @ColumnInfo(name = "author")
@@ -16,8 +17,6 @@ data class ArticleEntity(
     val title: String?,
     @ColumnInfo(name = "description")
     val description: String?,
-    @ColumnInfo(name = "url")
-    val url: String?,
     @ColumnInfo(name = "url_to_image")
     val urlToImage: String?,
     @ColumnInfo(name = "published_at")
@@ -34,5 +33,4 @@ data class ArticleEntity(
     val translatedText: String? = null,
     @ColumnInfo(name = "translated_title")
     val translatedTitle: String? = null,
-
 )

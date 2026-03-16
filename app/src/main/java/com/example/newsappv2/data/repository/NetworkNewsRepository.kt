@@ -33,6 +33,8 @@ class NetworkNewsRepository(
     override suspend fun clearCategoryNews(category: String) =
         database.articleDao().clearCategoryNews(category)
 
+    override suspend fun clearUnsavedArticles() = database.articleDao().clearUnsavedArticles()
+
     override suspend fun insertArticles(articles: List<ArticleEntity>) =
         database.articleDao().insertArticles(articles)
 

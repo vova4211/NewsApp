@@ -7,4 +7,6 @@ object Constants {
     const val DEFAULT_PAGE_SIZE = 10
     const val USER_PREFERENCES = "user_preferences"
     const val BASE_URL = "https://newsapi.org/"
+
+    const val TRANSLATE_URL = "https://api.mymemory.translated.net/"
 }

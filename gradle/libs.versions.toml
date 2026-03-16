@@ -26,6 +26,7 @@ hiltNavigationCompose = "1.2.0"
 hiltWork = "1.2.0"
 mlkitTranslate = "17.0.2"
 jsoup = "1.17.2"
+mlkitLanguageId = "17.0.5"
 foundationLayout = "1.10.3"
 
 [libraries]
@@ -38,7 +39,7 @@ hilt-ext-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.r
 coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutines" }
 # Google ML Kit (On-device Translation)
 mlkit-translate = { group = "com.google.mlkit", name = "translate", version.ref = "mlkitTranslate" }
-
+mlkit-language-id = { group = "com.google.mlkit", name = "language-id", version.ref = "mlkitLanguageId" }
 # Jsoup (Для парсингу HTML-сторінок новин)
 jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup" }
 room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }

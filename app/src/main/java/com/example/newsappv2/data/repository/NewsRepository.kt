@@ -38,4 +38,5 @@ interface NewsRepository {
 
     suspend fun updateArticleTranslation(url: String, translatedText: String, translatedTitle: String)
 
+    suspend fun clearUnsavedArticles()
 }
