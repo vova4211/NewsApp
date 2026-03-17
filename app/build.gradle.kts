@@ -27,8 +27,13 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
+
         val apiKey = localProperties.getProperty("apiKey", "")
         buildConfigField("String", "API_KEY", "\"$apiKey\"")
+
+        val googleApiKey = localProperties.getProperty("GOOGLE_TRANSLATE_API_KEY", "")
+        buildConfigField("String", "GOOGLE_TRANSLATE_API_KEY", "\"$googleApiKey\"")
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

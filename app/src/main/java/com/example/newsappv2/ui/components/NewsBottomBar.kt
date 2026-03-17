@@ -4,18 +4,12 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -33,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.newsappv2.R
 import com.example.newsappv2.ui.screens.CategoriesDestination
 import com.example.newsappv2.ui.screens.HomeDestination
+import com.example.newsappv2.ui.screens.SettingsDestination
 import com.example.newsappv2.ui.theme.NewsAppV2Theme
 import com.example.newsappv2.util.currentRoute
 
@@ -43,6 +38,7 @@ fun NewsBottomBar(
 ) {
     val homeSelected = currentRoute == HomeDestination.route
     val categoriesSelected = currentRoute == CategoriesDestination.route
+    val settingsSelected = currentRoute == SettingsDestination.route
 
     BottomAppBar(
         containerColor = MaterialTheme.colorScheme.surface,
@@ -53,56 +49,73 @@ fun NewsBottomBar(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.space_medium))
             ) {
-                val homeBackgroundColor by animateColorAsState(
-                    targetValue = if (homeSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f) else Color.Transparent
-                )
-                val homeBorderColor by animateColorAsState(
-                    targetValue = if (homeSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant
-                )
-
+                val homeBackgroundColor by animateColorAsState(targetValue = if (homeSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f) else Color.Transparent)
+                val homeBorderColor by animateColorAsState(targetValue = if (homeSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant)
                 Box(
                     modifier = Modifier
                         .weight(1f)
-                        .clip(RoundedCornerShape(dimensionResource(id  = R.dimen.box_corner_radius)))
+                        .clip(RoundedCornerShape(dimensionResource(id = R.dimen.box_corner_radius)))
                         .background(homeBackgroundColor)
-                        .border(dimensionResource(id = R.dimen.bottom_bar_box_border), homeBorderColor, RoundedCornerShape(dimensionResource(id  = R.dimen.box_corner_radius)))
+                        .border(
+                            dimensionResource(id = R.dimen.bottom_bar_box_border),
+                            homeBorderColor,
+                            RoundedCornerShape(dimensionResource(id = R.dimen.box_corner_radius))
+                        )
                         .clickable { onTabSelected(HomeDestination.route) }
-                        .padding(vertical = dimensionResource(id = R.dimen.padding_medium), horizontal = dimensionResource(id = R.dimen.padding_large))
+                        .padding(
+                            vertical = dimensionResource(id = R.dimen.padding_medium),
+                            horizontal = dimensionResource(id = R.dimen.padding_large)
+                        )
                 ) {
-                    BottomBarItem(
-                        icon = Icons.Filled.Home,
-                        text = stringResource(R.string.home),
-                        selected = homeSelected,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    BottomBarItem(icon = Icons.Filled.Home, text = stringResource(R.string.home), selected = homeSelected, modifier = Modifier.fillMaxWidth())
                 }
-                val categoriesBackgroundColor by animateColorAsState(
-                    targetValue = if (categoriesSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f) else Color.Transparent
-                )
-                val categoriesBorderColor by animateColorAsState(
-                    targetValue = if (categoriesSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant
-                )
 
+                val categoriesBackgroundColor by animateColorAsState(targetValue = if (categoriesSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f) else Color.Transparent)
+                val categoriesBorderColor by animateColorAsState(targetValue = if (categoriesSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant)
                 Box(
                     modifier = Modifier
                         .weight(1f)
-                        .clip(RoundedCornerShape(dimensionResource(id  = R.dimen.box_corner_radius)))
+                        .clip(RoundedCornerShape(dimensionResource(id = R.dimen.box_corner_radius)))
                         .background(categoriesBackgroundColor)
-                        .border(dimensionResource(id = R.dimen.bottom_bar_box_border), categoriesBorderColor, RoundedCornerShape(dimensionResource(id  = R.dimen.box_corner_radius)))
+                        .border(
+                            dimensionResource(id = R.dimen.bottom_bar_box_border),
+                            categoriesBorderColor,
+                            RoundedCornerShape(dimensionResource(id = R.dimen.box_corner_radius))
+                        )
                         .clickable { onTabSelected(CategoriesDestination.route) }
-                        .padding(vertical = dimensionResource(id = R.dimen.padding_medium), horizontal = dimensionResource(id = R.dimen.padding_large))
+                        .padding(
+                            vertical = dimensionResource(id = R.dimen.padding_medium),
+                            horizontal = dimensionResource(id = R.dimen.padding_large)
+                        )
                 ) {
-                    BottomBarItem(
-                        icon = Icons.Filled.Menu,
-                        text = stringResource(R.string.categories),
-                        selected = categoriesSelected,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    BottomBarItem(icon = Icons.Filled.Menu, text = stringResource(R.string.categories), selected = categoriesSelected, modifier = Modifier.fillMaxWidth())
+                }
+
+                val settingsBackgroundColor by animateColorAsState(targetValue = if (settingsSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f) else Color.Transparent)
+                val settingsBorderColor by animateColorAsState(targetValue = if (settingsSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant)
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(dimensionResource(id = R.dimen.box_corner_radius)))
+                        .background(settingsBackgroundColor)
+                        .border(
+                            dimensionResource(id = R.dimen.bottom_bar_box_border),
+                            settingsBorderColor,
+                            RoundedCornerShape(dimensionResource(id = R.dimen.box_corner_radius))
+                        )
+                        .clickable { onTabSelected(SettingsDestination.route) }
+                        .padding(
+                            vertical = dimensionResource(id = R.dimen.padding_medium),
+                            horizontal = dimensionResource(id = R.dimen.padding_large)
+                        )
+                ) {
+                    BottomBarItem(icon = Icons.Filled.Settings, text = stringResource(R.string.settings), selected = settingsSelected, modifier = Modifier.fillMaxWidth())
                 }
             }
         }
     )
 }
+// ... далі твій код BottomBarItem залишається без змін ...
 
 @Composable
 fun BottomBarItem(

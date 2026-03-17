@@ -1,5 +1,7 @@
 package com.example.newsappv2.data.remote.translation
 
+import android.text.Html
+import com.example.newsappv2.util.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -9,24 +11,26 @@ import javax.inject.Singleton
 class CloudTranslator @Inject constructor(
     private val api: CloudTranslationApi
 ) {
-    suspend fun translate(text: String): Result<String> {
+    suspend fun translate(text: String, targetLanguage: String = "uk"): Result<String> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = api.translate(text)
+                val response = api.translate(
+                    text = text,
+                    targetLanguage = targetLanguage,
+                    apiKey = com.example.newsappv2.BuildConfig.GOOGLE_TRANSLATE_API_KEY // <--- БЕРЕМО КЛЮЧ З БЕЗПЕЧНОГО МІСЦЯ
+                )
 
                 if (response.isSuccessful) {
-                    val translatedText = response.body()?.responseData?.translatedText
+                    val rawTranslatedText = response.body()?.data?.translations?.firstOrNull()?.translatedText
 
-                    if (!translatedText.isNullOrBlank() &&
-                        !translatedText.contains("MYMEMORY WARNING") &&
-                        !translatedText.contains("LIMIT EXCEEDED")
-                    ) {
-                        Result.success(translatedText)
+                    if (!rawTranslatedText.isNullOrBlank()) {
+                        val cleanText = Html.fromHtml(rawTranslatedText, Html.FROM_HTML_MODE_LEGACY).toString()
+                        Result.success(cleanText)
                     } else {
-                        Result.failure(Exception("Перевищено ліміт хмари або порожня відповідь"))
+                        Result.failure(Exception("Порожня відповідь від Google API"))
                     }
                 } else {
-                    Result.failure(Exception("Помилка хмарного API: ${response.code()}"))
+                    Result.failure(Exception("Помилка Google Cloud API: ${response.code()} - ${response.errorBody()?.string()}"))
                 }
             } catch (e: Exception) {
                 Result.failure(e)

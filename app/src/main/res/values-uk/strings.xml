@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">News App</string>
+    <string name="retry">Повторити</string>
+    <string name="loading">Завантаження...</string>
+    <string name="back_button">назад</string>
+    <string name="loading_failed">Не вдалося завантажити</string>
+    <string name="author_unknown">Автор невідомий</string>
+    <string name="title_unknown">Заголовок невідомий</string>
+    <string name="unknown_description">Опис невідомий</string>
+    <string name="unknown_when_published">Час публікації невідомий</string>
+    <string name="unknown_source">Джерело невідоме</string>
+    <string name="missing_image">відсутнє зображення</string>
+    <string name="go_to_the_website">Перейти на сайт</string>
+    <string name="enter_a_new_query">Введіть новий запит</string>
+    <string name="email_icon">Іконка email</string>
+    <string name="clear_text">Очистити текст</string>
+    <string name="search_icon">Іконка пошуку</string>
+    <string name="menu_drawer_icon">Іконка меню</string>
+    <string name="select_category">Обрати категорію</string>
+    <string name="home_screen">Головний екран</string>
+    <string name="home">Головна</string>
+    <string name="categories_screen">Екран категорій</string>
+    <string name="categories">Категорії</string>
+    <string name="read_more">Читати далі</string>
+    <string name="author">"Автор: "</string>
+    <string name="publishing_house">"Видавництво: "</string>
+    <string name="settings">Налаштування</string>
+    <string name="ukrainian">Українська</string>
+    <string name="settings_screen">Налаштування</string>
+    <string name="news_translation_language">Мова перекладу новин</string>
+    <string name="select_the_language">Оберіть мову, на яку будуть автоматично перекладатися статті.</string>
+    <string name="target_language">Цільова мова</string>
+    <string name="translating">Перекладаємо...</string>
+    <string name="translate">Перекласти</string>
+    <string name="read_the_original">Читати оригінал</string>
+    <string name="read_translation">Читати переклад</string>
+</resources>

@@ -1,8 +1,8 @@
 package com.example.newsappv2.di
 
 import com.example.newsappv2.data.remote.NewsApiService
+import com.example.newsappv2.util.Constants
 import com.example.newsappv2.util.Constants.BASE_URL
-import com.example.newsappv2.util.Constants.TRANSLATE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,8 +35,8 @@ object NetworkModule {
     @Singleton
     fun provideCloudTranslationApi(): com.example.newsappv2.data.remote.translation.CloudTranslationApi {
         return Retrofit.Builder()
-            .baseUrl(TRANSLATE_URL)
-            .addConverterFactory(retrofit2.converter.gson.GsonConverterFactory.create())
+            .baseUrl(Constants.GOOGLE_TRANSLATE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(com.example.newsappv2.data.remote.translation.CloudTranslationApi::class.java)
     }

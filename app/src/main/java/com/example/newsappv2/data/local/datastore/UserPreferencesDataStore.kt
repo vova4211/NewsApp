@@ -59,9 +59,29 @@ class UserPreferencesDataStore @Inject constructor(
         }
     }
 
+    val targetLanguage: Flow<String> = dataStore.data
+        .catch {
+            if (it is IOException) {
+                Log.e(TAG, "Error reading preferences.", it)
+                emit(emptyPreferences())
+            } else {
+                throw it
+            }
+        }
+        .map { preferences ->
+            preferences[TARGET_LANGUAGE] ?: "en"
+        }
+
+    suspend fun saveTargetLanguage(languageCode: String) {
+        dataStore.edit { preferences ->
+            preferences[TARGET_LANGUAGE] = languageCode
+        }
+    }
+
     companion object {
         private  val SEARCH_QUERY = stringPreferencesKey("search_query")
         private val SELECTED_CATEGORY = stringPreferencesKey("selected_category")
+        private val TARGET_LANGUAGE = stringPreferencesKey("target_language")
         private const val TAG = "UserPreferencesRepo"
     }
 }

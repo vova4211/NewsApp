@@ -8,5 +8,5 @@ object Constants {
     const val USER_PREFERENCES = "user_preferences"
     const val BASE_URL = "https://newsapi.org/"
 
-    const val TRANSLATE_URL = "https://api.mymemory.translated.net/"
+    const val GOOGLE_TRANSLATE_URL = "https://translation.googleapis.com/"
 }

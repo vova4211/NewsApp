@@ -16,9 +16,10 @@ import com.example.newsappv2.ui.screens.CategoriesDestination
 import com.example.newsappv2.ui.screens.CategoriesScreen
 import com.example.newsappv2.ui.screens.HomeDestination
 import com.example.newsappv2.ui.screens.HomeScreen
+import com.example.newsappv2.ui.screens.SettingsDestination
+import com.example.newsappv2.ui.screens.SettingsScreen
 import com.example.newsappv2.viewmodel.CategoryViewModel
 import com.example.newsappv2.viewmodel.HomeViewModel
-
 
 @Composable
 fun NewsNavHost(
@@ -52,6 +53,9 @@ fun NewsNavHost(
                     navController.navigate("webview/$encoded")
                 }
             )
+        }
+        composable(route = SettingsDestination.route) {
+            SettingsScreen()
         }
         composable(
             route = "webview/{encodedUrl}",

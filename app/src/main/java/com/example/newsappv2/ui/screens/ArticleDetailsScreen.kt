@@ -75,13 +75,13 @@ fun ArticleDetailsScreen(
                             strokeWidth = 2.dp
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Перекладаємо...")
+                        Text(stringResource(R.string.translating))
                     } else if (!hasTranslation) {
-                        Text("Перекласти 🇺🇦")
+                        Text(stringResource(R.string.translate))
                     } else if (isShowingTranslation) {
-                        Text("Читати оригінал 🇬🇧")
+                        Text(stringResource(R.string.read_the_original))
                     } else {
-                        Text("Читати переклад 🇺🇦")
+                        Text(stringResource(R.string.read_translation))
                     }
                 }
             }

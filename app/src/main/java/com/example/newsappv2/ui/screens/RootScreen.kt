@@ -27,7 +27,9 @@ fun RootScreen(
 
     ) {
     val currentRoute = currentRoute(navController)
-    val showBottomBar = currentRoute == HomeDestination.route || currentRoute == CategoriesDestination.route
+    val showBottomBar = currentRoute == HomeDestination.route ||
+            currentRoute == CategoriesDestination.route ||
+            currentRoute == SettingsDestination.route
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val onTabSelected: (String) -> Unit = { route ->

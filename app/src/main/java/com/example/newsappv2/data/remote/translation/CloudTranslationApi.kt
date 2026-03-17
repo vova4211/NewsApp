@@ -1,14 +1,15 @@
 package com.example.newsappv2.data.remote.translation
 
-
 import retrofit2.Response
-import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface CloudTranslationApi {
-    @GET("get")
+    @POST("language/translate/v2")
     suspend fun translate(
         @Query("q") text: String,
-        @Query("langpair") langPair: String = "en|uk"
-    ): Response<MyMemoryResponse>
+        @Query("target") targetLanguage: String,
+        @Query("key") apiKey: String,
+        @Query("format") format: String = "text"
+    ): Response<GoogleTranslationResponse>
 }
