@@ -33,7 +33,15 @@ interface ArticleDao {
     @Query("SELECT * FROM articles WHERE url = :url LIMIT 1")
     fun getArticleByUrl(url: String): kotlinx.coroutines.flow.Flow<ArticleEntity>
 
-    // НАШ НОВИЙ МЕТОД ДЛЯ РОЗУМНОГО ОЧИЩЕННЯ
-    @Query("DELETE FROM articles WHERE full_text IS NULL AND translated_text IS NULL")
+    @Query("DELETE FROM articles WHERE is_saved = 0 AND full_text IS NULL AND translated_text IS NULL")
     suspend fun clearUnsavedArticles()
+
+    @Query("SELECT * FROM articles WHERE is_saved = 1 ORDER BY published_at DESC")
+    fun getSavedArticles(): kotlinx.coroutines.flow.Flow<List<ArticleEntity>>
+
+    @Query("UPDATE articles SET is_saved = :isSaved WHERE url = :url")
+    suspend fun updateSavedStatus(url: String, isSaved: Boolean)
+
+    @Query("SELECT * FROM articles WHERE type = 'search' AND `query` = :query AND full_text IS NULL ORDER BY published_at DESC LIMIT 5")
+    suspend fun getArticlesForSmartSync(query: String): List<ArticleEntity>
 }

@@ -1,6 +1,7 @@
 package com.example.newsappv2.di
 
 import android.content.Context
+import com.example.newsappv2.data.local.dao.SearchHistoryDao
 import com.example.newsappv2.data.local.db.NewsDatabase
 import com.example.newsappv2.data.local.db.dao.ArticleDao
 import dagger.Module
@@ -22,5 +23,10 @@ object DatabaseModule {
     @Provides
     fun provideArticleDao(database: NewsDatabase): ArticleDao {
         return  database.articleDao()
+    }
+
+    @Provides
+    fun provideSearchHistoryDao(database: NewsDatabase): SearchHistoryDao {
+        return database.searchHistoryDao()
     }
 }

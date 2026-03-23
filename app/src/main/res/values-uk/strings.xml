@@ -35,4 +35,15 @@
     <string name="translate">Перекласти</string>
     <string name="read_the_original">Читати оригінал</string>
     <string name="read_translation">Читати переклад</string>
+    <string name="interface_language">Мова інтерфейсу</string>
+    <string name="save_art_det">Зберегти</string>
+    <string name="saved_bottom_bar">Збережено</string>
+    <string name="category_business">Бізнес</string>
+    <string name="category_entertainment">Розваги</string>
+    <string name="category_general">Головне</string>
+    <string name="category_health">Здоров\'я</string>
+    <string name="category_science">Наука</string>
+    <string name="category_sports">Спорт</string>
+    <string name="category_technology">Технології</string>
+    <string name="new_article_worker">Нова стаття!</string>
 </resources>

@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.androidx.paging.compose)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.navigation.runtime.android)
     implementation(libs.androidx.navigation.compose.android)
     implementation(libs.engage.core)

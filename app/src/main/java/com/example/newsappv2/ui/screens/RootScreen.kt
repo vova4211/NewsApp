@@ -29,6 +29,7 @@ fun RootScreen(
     val currentRoute = currentRoute(navController)
     val showBottomBar = currentRoute == HomeDestination.route ||
             currentRoute == CategoriesDestination.route ||
+            currentRoute == SavedArticlesDestination.route ||
             currentRoute == SettingsDestination.route
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()

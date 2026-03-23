@@ -35,4 +35,15 @@
     <string name="translate">Translate</string>
     <string name="read_the_original">Read the original</string>
     <string name="read_translation">Read translation</string>
+    <string name="interface_language">Interface language</string>
+    <string name="save_art_det">Save</string>
+    <string name="saved_bottom_bar">Saved</string>
+    <string name="category_business">Business</string>
+    <string name="category_entertainment">Entertainment</string>
+    <string name="category_general">General</string>
+    <string name="category_health">Health</string>
+    <string name="category_science">Science</string>
+    <string name="category_sports">Sports</string>
+    <string name="category_technology">Technology</string>
+    <string name="new_article_worker">New article!</string>
 </resources>

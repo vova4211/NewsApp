@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,9 +13,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,10 +50,12 @@ import com.example.newsappv2.util.formatAsDate
 fun NewsCard(
     modifier: Modifier = Modifier,
     article: Article,
+    // ДОДАЛИ НОВІ ПАРАМЕТРИ ДЛЯ ЗАКЛАДКИ
+    isSaved: Boolean = false,
+    onBookmarkClick: () -> Unit = {},
     onClick: () -> Unit,
 ) {
     val urlToImageText = article.urlToImage.replace("http://", "https://")
-    val urlText = article.url.replace("http://", "https://")
     val authorText = article.author
     val titleText = article.title
     val descriptionText = article.description
@@ -57,11 +65,11 @@ fun NewsCard(
 
     var isLoading by remember { mutableStateOf(urlToImageText.isNotBlank()) }
 
-
     Card(
         modifier = modifier
             .padding(dimensionResource(id = R.dimen.padding_default))
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { onClick() }, // Перенесли onClick на всю картку для зручності
         border = BorderStroke(dimensionResource(id = R.dimen.card_border_width), MaterialTheme.colorScheme.outlineVariant),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -76,13 +84,28 @@ fun NewsCard(
                 .padding(dimensionResource(id = R.dimen.padding_default)),
             horizontalAlignment = Alignment.Start
         ) {
-            Text(
-                text = titleText,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                modifier = Modifier.fillMaxWidth()
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.Top
+            ) {
+                Text(
+                    text = titleText,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.weight(1f)
+                )
+
+                IconButton(onClick = onBookmarkClick) {
+                    Icon(
+                        imageVector = if (isSaved) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
+                        contentDescription = "Зберегти статтю",
+                        tint = if (isSaved) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                }
+            }
+
             Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.space_medium)))
+
             Box( modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(16f / 9f)
@@ -105,7 +128,7 @@ fun NewsCard(
                     onError = { isLoading = false},
                     onLoading = { isLoading = true},
                     modifier = Modifier.fillMaxSize()
-                    )
+                )
 
                 if (isLoading) {
                     CircularProgressIndicator(
@@ -144,44 +167,6 @@ fun NewsCard(
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.space_small)))
-            Text(
-                text = stringResource(R.string.read_more),
-                modifier = Modifier
-                    .align(Alignment.End)
-                    .clickable {
-                        onClick()
-                    },
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                textDecoration = TextDecoration.Underline
-            )
-
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun NewsCardPreview(
-) {
-    NewsAppV2Theme{
-        val mockData =
-            Article(
-                sourceName = "BBC News",
-                author = "BBC News",
-                title = "Small boats situation getting worse, says No 10",
-                url = "https://www.bbc.co.uk/news/articles/c39zk7pp29ko",
-                urlToImage = "https://ichef.bbci.co.uk/ace/branded_news/1200/cpsprodpb/881b/live/fd0f5960-4b6f-11f0-a6b4-f7f4e17c182c.jpg",
-                publishedAt = "2025-06-17T14:22:18.6035575Z",
-                description = "Downing Street said Sir Keir Starmer would make the issue the key focus of a summit with France next month."
-            )
-
-        NewsCard(
-            article = mockData,
-            modifier = Modifier,
-            onClick = { }
-        )
     }
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.newsappv2.data.repository.NewsRepository
 import com.example.newsappv2.domain.model.Article
 import com.example.newsappv2.domain.usecase.DownloadArticleFullTextUseCase
+import com.example.newsappv2.domain.usecase.ToggleBookmarkUseCase
 import com.example.newsappv2.domain.usecase.TranslateArticleUseCase
 import com.example.newsappv2.util.NetworkMonitor
 import com.example.newsappv2.util.toDomainArticle
@@ -26,6 +27,7 @@ class ArticleDetailsViewModel @Inject constructor(
     repository: NewsRepository,
     private val downloadArticleFullTextUseCase: DownloadArticleFullTextUseCase,
     private val translateArticleUseCase: TranslateArticleUseCase,
+    private val toggleBookmarkUseCase: ToggleBookmarkUseCase,
     private val networkMonitor: NetworkMonitor,
 ) : ViewModel() {
 
@@ -85,6 +87,13 @@ class ArticleDetailsViewModel @Inject constructor(
                 _error.value = result.exceptionOrNull()?.message ?: "Помилка перекладу. Перевірте підключення до мережі для першого завантаження моделі."
             }
             _isTranslating.value = false
+        }
+    }
+
+    fun toggleBookmark() {
+        val currentArticle = article.value ?: return
+        viewModelScope.launch {
+            toggleBookmarkUseCase(currentArticle.url, !currentArticle.isSaved)
         }
     }
 

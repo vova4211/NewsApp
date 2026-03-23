@@ -6,11 +6,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.newsappv2.data.local.db.dao.ArticleDao
 import com.example.newsappv2.data.local.db.entities.ArticleEntity
+import com.example.newsappv2.data.local.db.entities.SearchQueryEntity
+import com.example.newsappv2.data.local.dao.SearchHistoryDao
 
-@Database(entities = [ArticleEntity::class], version = 5, exportSchema = false)
+@Database(entities = [ArticleEntity::class, SearchQueryEntity::class], version = 8, exportSchema = false) // Змінили на 7
 abstract class NewsDatabase : RoomDatabase() {
     abstract fun articleDao(): ArticleDao
-
+    abstract fun searchHistoryDao(): SearchHistoryDao
     companion object {
         @Volatile
         private var instance: NewsDatabase? = null

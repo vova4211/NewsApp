@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.newsappv2.R
 import com.example.newsappv2.util.Category
@@ -76,13 +77,13 @@ fun DrawerContainerForCategories(
                     ) {
                         Icon(
                             painter = painterResource(id = category.categoryImage),
-                            contentDescription = category.categoryName,
+                            contentDescription = stringResource(id = category.titleResId) ,
                             tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(dimensionResource(id = R.dimen.image_icon_size))
                         )
                         Spacer(modifier = Modifier.width(dimensionResource(R.dimen.drawer_spacer)))
                         Text(
-                            text = category.categoryName,
+                            text = stringResource(id = category.titleResId),
                             style = MaterialTheme.typography.labelLarge,
                             color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                         )

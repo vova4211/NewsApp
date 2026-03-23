@@ -21,11 +21,9 @@ import com.example.newsappv2.ui.components.OutlinedTextFieldHomeScreen
 import com.example.newsappv2.util.PagingLoadStateHandler
 import com.example.newsappv2.viewmodel.HomeViewModel
 
-
 object HomeDestination: NavigationDestination {
     override val route = "home"
 }
-
 
 @Composable
 fun HomeScreen(
@@ -35,22 +33,29 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     val searchQuery by viewModel.searchQuery.collectAsState()
-    val lastQuery by viewModel.lastSearchQuery.collectAsState()
-
+    val recentQueries by viewModel.recentQueries.collectAsState()
     val newsItems = viewModel.homeNewsPagingFlow.collectAsLazyPagingItems()
 
     HomeNewsLazyPagingList(
-        newsItems =  newsItems,
+        newsItems = newsItems,
         searchQuery = searchQuery,
-        lastQuery = lastQuery,
+        recentQueries = recentQueries,
         onSearchTextChange = {
             viewModel.onSearchTextChanged(it)
-            viewModel.persistLastSearchQuery(it)
         },
-        onUseLastQuery = { viewModel.onSearchTextChanged(it)},
+        onSearchTriggered = {
+            viewModel.run { onSearchTriggered(it) }
+        },
+        onUseRecentQuery = {
+            viewModel.onSearchTextChanged(it)
+            viewModel.onSearchTriggered(it)
+        },
         onArticleClicked = onArticleClicked,
+        onBookmarkClick = { url, isSaved ->
+            viewModel.toggleBookmark(url, isSaved)
+        },
         modifier = modifier,
-        contentPadding =contentPadding
+        contentPadding = contentPadding
     )
 }
 
@@ -58,11 +63,14 @@ fun HomeScreen(
 fun HomeNewsLazyPagingList(
     newsItems: LazyPagingItems<Article>,
     searchQuery: String,
-    lastQuery: String,
+    recentQueries: List<String>,
     onArticleClicked: (String) -> Unit,
     onSearchTextChange: (String) -> Unit,
-    onUseLastQuery: (String) -> Unit,
-    modifier: Modifier =  Modifier,
+    onSearchTriggered: (String) -> Unit,
+    onUseRecentQuery: (String) -> Unit,
+    // 2. ДОДАЛИ НОВИЙ ПАРАМЕТР СЮДИ
+    onBookmarkClick: (String, Boolean) -> Unit,
+    modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(dimensionResource(id = R.dimen.padding_zero))
 ) {
     Column(modifier = Modifier
@@ -73,8 +81,9 @@ fun HomeNewsLazyPagingList(
         OutlinedTextFieldHomeScreen(
             searchQuery = searchQuery,
             onSearchTextChange = onSearchTextChange,
-            lastQuery = lastQuery,
-            onUseLastQuery = onUseLastQuery,
+            onSearchTriggered = onSearchTriggered,
+            recentQueries = recentQueries,
+            onUseRecentQuery = onUseRecentQuery,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = dimensionResource(id = R.dimen.padding_large), vertical = dimensionResource(id = R.dimen.padding_default))
@@ -90,6 +99,10 @@ fun HomeNewsLazyPagingList(
                 article?.let {
                     NewsCard(
                         article = it,
+                        isSaved = it.isSaved,
+                        onBookmarkClick = {
+                            onBookmarkClick(it.url, !it.isSaved)
+                        },
                         onClick = {
                             val url = it.url
                             onArticleClicked(url)
@@ -108,7 +121,3 @@ fun HomeNewsLazyPagingList(
         }
     }
 }
-
-
-
-

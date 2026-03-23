@@ -20,6 +20,26 @@ class UserPreferencesDataStore @Inject constructor(
 ) {
 
     private val dataStore = context.dataStore
+
+    val uiLanguage: Flow<String> = dataStore.data
+        .catch {
+            if (it is IOException) {
+                Log.e(TAG, "Error reading preferences.", it)
+                emit(emptyPreferences())
+            } else {
+                throw it
+            }
+        }
+        .map { preferences ->
+            preferences[UI_LANGUAGE] ?: "uk" // За замовчуванням українська
+        }
+
+    suspend fun saveUiLanguage(languageCode: String) {
+        dataStore.edit { preferences ->
+            preferences[UI_LANGUAGE] = languageCode
+        }
+    }
+
     val searchQuery: Flow<String> = dataStore.data
         .catch {
             if ( it is IOException) {
@@ -39,10 +59,10 @@ class UserPreferencesDataStore @Inject constructor(
         }
     }
 
-    val selectCategory : Flow<Category> = dataStore.data
+    val selectCategory: Flow<Category> = dataStore.data
         .catch {
-            if ( it is IOException) {
-                Log.e(TAG,"Error reading preferences.", it )
+            if (it is IOException) {
+                Log.e(TAG, "Error reading preferences.", it)
                 emit(emptyPreferences())
             } else {
                 throw it
@@ -55,7 +75,7 @@ class UserPreferencesDataStore @Inject constructor(
 
     suspend fun saveSelectedCategory(category: Category) {
         dataStore.edit { preferences ->
-            preferences[SELECTED_CATEGORY] = category.categoryName
+            preferences[SELECTED_CATEGORY] = category.apiValue
         }
     }
 
@@ -82,6 +102,7 @@ class UserPreferencesDataStore @Inject constructor(
         private  val SEARCH_QUERY = stringPreferencesKey("search_query")
         private val SELECTED_CATEGORY = stringPreferencesKey("selected_category")
         private val TARGET_LANGUAGE = stringPreferencesKey("target_language")
+        private val UI_LANGUAGE = stringPreferencesKey("ui_language")
         private const val TAG = "UserPreferencesRepo"
     }
 }

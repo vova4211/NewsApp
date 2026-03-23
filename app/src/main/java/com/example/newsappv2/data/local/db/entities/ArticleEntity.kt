@@ -9,6 +9,7 @@ data class ArticleEntity(
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "url")
     val url: String,
+    // ... всі твої старі поля ...
     @ColumnInfo(name = "source_name")
     val sourceName: String?,
     @ColumnInfo(name = "author")
@@ -33,4 +34,6 @@ data class ArticleEntity(
     val translatedText: String? = null,
     @ColumnInfo(name = "translated_title")
     val translatedTitle: String? = null,
+    @ColumnInfo(name = "is_saved")
+    val isSaved: Boolean = false
 )

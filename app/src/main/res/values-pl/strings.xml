@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">News App</string>
+    <string name="retry">Ponów</string>
+    <string name="loading">Ładowanie...</string>
+    <string name="back_button">wstecz</string>
+
+    <string name="loading_failed">Nie udało się załadować</string>
+    <string name="author_unknown">Autor nieznany</string>
+    <string name="title_unknown">Tytuł nieznany</string>
+    <string name="unknown_description">Opis nieznany</string>
+    <string name="unknown_when_published">Nieznana data publikacji</string>
+    <string name="unknown_source">Nieznane źródło</string>
+    <string name="missing_image">brak zdjęcia</string>
+    <string name="go_to_the_website">Przejdź na stronę</string>
+    <string name="enter_a_new_query">Wprowadź nowe zapytanie</string>
+    <string name="email_icon">Ikona e-mail</string>
+    <string name="clear_text">Wyczyść tekst</string>
+    <string name="search_icon">Ikona wyszukiwania</string>
+    <string name="menu_drawer_icon">Ikona menu</string>
+    <string name="select_category">Wybierz kategorię</string>
+    <string name="home_screen">Ekran główny</string>
+    <string name="home">Główna</string>
+    <string name="categories_screen">Ekran kategorii</string>
+    <string name="categories">Kategorie</string>
+    <string name="read_more">Czytaj dalej</string>
+    <string name="author">"Autor: "</string>
+    <string name="publishing_house">"Wydawnictwo: "</string>
+    <string name="settings">Ustawienia</string>
+    <string name="ukrainian">Ukraiński</string>
+    <string name="settings_screen">Ustawienia</string>
+    <string name="news_translation_language">Język tłumaczenia wiadomości</string>
+    <string name="select_the_language">Wybierz język, na który artykuły będą automatycznie tłumaczone.</string>
+    <string name="target_language">Język docelowy</string>
+    <string name="translating">Tłumaczenie...</string>
+    <string name="translate">Przetłumacz</string>
+    <string name="read_the_original">Czytaj oryginał</string>
+    <string name="read_translation">Czytaj tłumaczenie</string>
+    <string name="interface_language">Język interfejsu</string>
+    <string name="save_art_det">Ratować</string>
+    <string name="saved_bottom_bar">Zapisano</string>
+    <string name="category_business">Biznes</string>
+    <string name="category_entertainment">Rozrywka</string>
+    <string name="category_general">Ogólne</string>
+    <string name="category_health">Zdrowie</string>
+    <string name="category_science">Nauka</string>
+    <string name="category_sports">Sport</string>
+    <string name="category_technology">Technologia</string>
+    <string name="new_article_worker">Nowy artykuł!</string>
+</resources>

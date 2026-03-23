@@ -51,7 +51,7 @@ fun CategoriesTopBarWithDrawerButton(
                 }
                 Spacer(modifier = Modifier.width(dimensionResource(id =  R.dimen.space_medium)))
                 Text(
-                    text = selectedCategory.categoryName,
+                    text = stringResource(id = selectedCategory.titleResId),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onPrimary
                 )

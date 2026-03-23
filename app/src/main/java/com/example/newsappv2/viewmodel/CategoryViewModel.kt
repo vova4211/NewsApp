@@ -8,6 +8,7 @@ import com.example.newsappv2.domain.model.Article
 import com.example.newsappv2.domain.usecase.GetCategoryNewsUseCase
 import com.example.newsappv2.domain.usecase.GetSavedCategoryUseCase
 import com.example.newsappv2.domain.usecase.SaveCategoryUseCase
+import com.example.newsappv2.domain.usecase.ToggleBookmarkUseCase
 import com.example.newsappv2.util.Category
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -30,6 +31,7 @@ class CategoryViewModel @Inject constructor(
     private val getCategoryNewsUseCase: GetCategoryNewsUseCase,
     private val getSavedCategoryUseCase: GetSavedCategoryUseCase,
     private val saveCategoryUseCase: SaveCategoryUseCase,
+    private val toggleBookmarkUseCase: ToggleBookmarkUseCase
 ) : ViewModel() {
 
     private val _selectCategory = MutableStateFlow(Category.BUSINESS)
@@ -50,7 +52,7 @@ class CategoryViewModel @Inject constructor(
             .debounce(500)
             .distinctUntilChanged()
             .flatMapLatest { category ->
-                getCategoryNewsUseCase(category.categoryName.lowercase())
+                getCategoryNewsUseCase(category.apiValue)
             }
             .cachedIn(viewModelScope)
             .stateIn(
@@ -66,6 +68,12 @@ class CategoryViewModel @Inject constructor(
     fun persistLastSelectedCategory(category: Category) {
         viewModelScope.launch {
             saveCategoryUseCase(category)
+        }
+    }
+
+    fun toggleBookmark(url: String, isSaved: Boolean) {
+        viewModelScope.launch {
+            toggleBookmarkUseCase(url = url, isSaved = isSaved)
         }
     }
 }

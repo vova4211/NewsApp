@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmark // ДОДАЛИ
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
@@ -27,6 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.newsappv2.R
 import com.example.newsappv2.ui.screens.CategoriesDestination
 import com.example.newsappv2.ui.screens.HomeDestination
+import com.example.newsappv2.ui.screens.SavedArticlesDestination // ДОДАЛИ
 import com.example.newsappv2.ui.screens.SettingsDestination
 import com.example.newsappv2.ui.theme.NewsAppV2Theme
 import com.example.newsappv2.util.currentRoute
@@ -38,6 +40,7 @@ fun NewsBottomBar(
 ) {
     val homeSelected = currentRoute == HomeDestination.route
     val categoriesSelected = currentRoute == CategoriesDestination.route
+    val savedSelected = currentRoute == SavedArticlesDestination.route // ДОДАЛИ
     val settingsSelected = currentRoute == SettingsDestination.route
 
     BottomAppBar(
@@ -49,6 +52,7 @@ fun NewsBottomBar(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.space_medium))
             ) {
+                // HOME
                 val homeBackgroundColor by animateColorAsState(targetValue = if (homeSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f) else Color.Transparent)
                 val homeBorderColor by animateColorAsState(targetValue = if (homeSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant)
                 Box(
@@ -70,6 +74,7 @@ fun NewsBottomBar(
                     BottomBarItem(icon = Icons.Filled.Home, text = stringResource(R.string.home), selected = homeSelected, modifier = Modifier.fillMaxWidth())
                 }
 
+                // CATEGORIES
                 val categoriesBackgroundColor by animateColorAsState(targetValue = if (categoriesSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f) else Color.Transparent)
                 val categoriesBorderColor by animateColorAsState(targetValue = if (categoriesSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant)
                 Box(
@@ -89,6 +94,28 @@ fun NewsBottomBar(
                         )
                 ) {
                     BottomBarItem(icon = Icons.Filled.Menu, text = stringResource(R.string.categories), selected = categoriesSelected, modifier = Modifier.fillMaxWidth())
+                }
+
+                // ДОДАНО: SAVED ARTICLES
+                val savedBackgroundColor by animateColorAsState(targetValue = if (savedSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f) else Color.Transparent)
+                val savedBorderColor by animateColorAsState(targetValue = if (savedSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant)
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(dimensionResource(id = R.dimen.box_corner_radius)))
+                        .background(savedBackgroundColor)
+                        .border(
+                            dimensionResource(id = R.dimen.bottom_bar_box_border),
+                            savedBorderColor,
+                            RoundedCornerShape(dimensionResource(id = R.dimen.box_corner_radius))
+                        )
+                        .clickable { onTabSelected(SavedArticlesDestination.route) }
+                        .padding(
+                            vertical = dimensionResource(id = R.dimen.padding_medium),
+                            horizontal = dimensionResource(id = R.dimen.padding_large)
+                        )
+                ) {
+                    BottomBarItem(icon = Icons.Filled.Bookmark, text = stringResource(R.string.saved_bottom_bar), selected = savedSelected, modifier = Modifier.fillMaxWidth())
                 }
 
                 val settingsBackgroundColor by animateColorAsState(targetValue = if (settingsSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f) else Color.Transparent)
@@ -115,7 +142,6 @@ fun NewsBottomBar(
         }
     )
 }
-// ... далі твій код BottomBarItem залишається без змін ...
 
 @Composable
 fun BottomBarItem(

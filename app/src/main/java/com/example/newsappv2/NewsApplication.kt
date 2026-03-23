@@ -13,13 +13,14 @@ import dagger.hilt.android.HiltAndroidApp
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+
 @HiltAndroidApp
 class NewsApplication : Application(), Configuration.Provider {
 
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
 
-    override val  workManagerConfiguration: Configuration
+    override val workManagerConfiguration: Configuration
         get() = Configuration.Builder()
             .setWorkerFactory(workerFactory)
             .build()
@@ -28,16 +29,18 @@ class NewsApplication : Application(), Configuration.Provider {
         super.onCreate()
         setupWorkManager()
     }
+
     private fun setupWorkManager() {
         val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiredNetworkType(NetworkType.UNMETERED)
             .build()
 
         val periodicWorkRequest = PeriodicWorkRequestBuilder<NewsCheckWorker>( 6, TimeUnit.HOURS)
             .setConstraints(constraints)
             .build()
 
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork("NewsCheckWork",
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "NewsCheckWork",
             ExistingPeriodicWorkPolicy.KEEP,
             periodicWorkRequest
         )

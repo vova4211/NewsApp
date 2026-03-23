@@ -7,9 +7,10 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.example.newsappv2.NewsApplication
+import com.example.newsappv2.R
 import com.example.newsappv2.data.local.datastore.dataStore
 import com.example.newsappv2.data.repository.NewsRepository
+import com.example.newsappv2.domain.usecase.SmartSyncUseCase // ДОДАЛИ ІМПОРТ
 import com.example.newsappv2.util.Constants.DEFAULT_QUERY
 import com.example.newsappv2.util.notifications.NotificationHelper
 import dagger.assisted.Assisted
@@ -22,6 +23,7 @@ class NewsCheckWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted workerParams: WorkerParameters,
     private val newsRepository: NewsRepository,
+    private val smartSyncUseCase: SmartSyncUseCase
 ) : CoroutineWorker(context, workerParams) {
 
     private val TAG = "NewsCheckWorker"
@@ -61,15 +63,19 @@ class NewsCheckWorker @AssistedInject constructor(
 
                     NotificationHelper.showNotification(
                         context = context,
-                        title = "📰 New Article Available!",
-                        message = latestArticle.title ?: "Check the latest news now!"
+                        title = context.getString(R.string.new_article_worker),
+                        message = latestArticle.title ?: "Перевірте свіжі новини"
                     )
 
                     Log.d(TAG, "New article detected. Notification sent.")
                 } else {
                     Log.d(TAG, "No new article. Skipping notification.")
                 }
+                Log.d(TAG, "Запускаємо Smart Sync для офлайн-бази...")
+                smartSyncUseCase()
+
                 return Result.success()
+
             } else {
                 Log.e(TAG, "Response not successful: ${response.code()}")
                 return Result.retry()
@@ -82,5 +88,4 @@ class NewsCheckWorker @AssistedInject constructor(
             return Result.failure()
         }
     }
-
 }

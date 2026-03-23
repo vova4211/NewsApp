@@ -11,4 +11,5 @@ data class Article(
     val fullText: String? = null,
     val translatedText: String? = null,
     val translatedTitle: String? = null,
+    val isSaved: Boolean = false
 )

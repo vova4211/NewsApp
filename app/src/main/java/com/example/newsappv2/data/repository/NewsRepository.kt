@@ -39,4 +39,8 @@ interface NewsRepository {
     suspend fun updateArticleTranslation(url: String, translatedText: String, translatedTitle: String)
 
     suspend fun clearUnsavedArticles()
+    fun getSavedArticles(): Flow<List<ArticleEntity>>
+    suspend fun updateSavedStatus(url: String, isSaved: Boolean)
+
+    suspend fun getArticlesForSmartSync(query: String): List<ArticleEntity>
 }

@@ -30,6 +30,9 @@ fun CategoriesScreen(
     CategoryNewsLazyPagingList(
         newsCategoryItems = newsCategoryItems,
         onArticleClicked = onArticleClicked,
+        onBookmarkClick = { url, isSaved ->
+            viewModel.toggleBookmark(url, isSaved) // ДОДАЛИ
+        },
         modifier = modifier,
         contentPadding =contentPadding
     )
@@ -38,6 +41,7 @@ fun CategoriesScreen(
 @Composable
 fun CategoryNewsLazyPagingList(
     newsCategoryItems: LazyPagingItems<Article>,
+    onBookmarkClick: (String, Boolean) -> Unit,
     onArticleClicked: (String) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(dimensionResource(id = R.dimen.padding_zero))
@@ -52,6 +56,10 @@ fun CategoryNewsLazyPagingList(
             article?.let {
                 NewsCard(
                     article = it,
+                    isSaved = it.isSaved,
+                    onBookmarkClick = {
+                        onBookmarkClick(it.url, !it.isSaved)
+                    },
                     onClick = { onArticleClicked(it.url) },
                 )
             }

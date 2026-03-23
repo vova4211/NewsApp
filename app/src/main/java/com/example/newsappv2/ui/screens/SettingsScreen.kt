@@ -22,11 +22,8 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
-    val currentLangCode by viewModel.currentLanguageCode.collectAsState()
-    var expanded by remember { mutableStateOf(false) }
-
-    val currentLangName = viewModel.availableLanguages.entries
-        .find { it.value == currentLangCode }?.key ?: stringResource(R.string.ukrainian)
+    val targetLangCode by viewModel.currentTargetLanguageCode.collectAsState()
+    val uiLangCode by viewModel.currentUiLanguageCode.collectAsState()
 
     Scaffold(
         topBar = {
@@ -46,6 +43,21 @@ fun SettingsScreen(
                 .padding(16.dp)
         ) {
             Text(
+                text = stringResource(R.string.interface_language),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            LanguageDropdown(
+                label = "Мова додатку",
+                currentLanguageCode = uiLangCode,
+                availableLanguages = viewModel.availableLanguages,
+                onLanguageSelected = { viewModel.setUiLanguage(it) }
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Text(
                 text = stringResource(R.string.news_translation_language),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
@@ -57,38 +69,55 @@ fun SettingsScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(modifier = Modifier.height(16.dp))
+            LanguageDropdown(
+                label = stringResource(R.string.target_language),
+                currentLanguageCode = targetLangCode,
+                availableLanguages = viewModel.availableLanguages,
+                onLanguageSelected = { viewModel.setTargetLanguage(it) }
+            )
+        }
+    }
+}
 
-            ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = { expanded = !expanded }
-            ) {
-                OutlinedTextField(
-                    value = currentLangName,
-                    onValueChange = {},
-                    readOnly = true,
-                    label = { Text(stringResource(R.string.target_language)) },
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .menuAnchor(type = MenuAnchorType.PrimaryNotEditable)
-                )
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LanguageDropdown(
+    label: String,
+    currentLanguageCode: String,
+    availableLanguages: Map<String, String>,
+    onLanguageSelected: (String) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+    val currentLangName = availableLanguages.entries
+        .find { it.value == currentLanguageCode }?.key ?: "Українська"
 
-                ExposedDropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
-                ) {
-                    viewModel.availableLanguages.forEach { (languageName, languageCode) ->
-                        DropdownMenuItem(
-                            text = { Text(languageName) },
-                            onClick = {
-                                viewModel.setTargetLanguage(languageCode)
-                                expanded = false
-                            }
-                        )
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded }
+    ) {
+        OutlinedTextField(
+            value = currentLangName,
+            onValueChange = {},
+            readOnly = true,
+            label = { Text(label) },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .menuAnchor(type = MenuAnchorType.PrimaryNotEditable)
+        )
+
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            availableLanguages.forEach { (languageName, languageCode) ->
+                DropdownMenuItem(
+                    text = { Text(languageName) },
+                    onClick = {
+                        onLanguageSelected(languageCode)
+                        expanded = false
                     }
-                }
+                )
             }
         }
     }

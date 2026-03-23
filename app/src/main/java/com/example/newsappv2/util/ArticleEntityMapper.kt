@@ -15,5 +15,6 @@ fun ArticleEntity.toDomainArticle(): Article {
         fullText = this.fullText,
         translatedText = this.translatedText,
         translatedTitle = this.translatedTitle,
+        isSaved = this.isSaved
     )
 }
