@@ -46,6 +46,10 @@ class NetworkNewsRepository(
         return database.articleDao().getSavedArticles()
     }
 
+    override fun searchSavedArticles(searchQuery: String): Flow<List<ArticleEntity>> {
+        return database.articleDao().searchSavedArticles(searchQuery)
+    }
+
     override suspend fun updateSavedStatus(url: String, isSaved: Boolean) {
         database.articleDao().updateSavedStatus(url, isSaved)
     }

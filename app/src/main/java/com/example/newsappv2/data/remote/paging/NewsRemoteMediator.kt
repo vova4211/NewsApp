@@ -10,6 +10,7 @@ import androidx.room.withTransaction
 import com.example.newsappv2.data.local.datastore.UserPreferencesDataStore
 import com.example.newsappv2.data.local.db.NewsDatabase
 import com.example.newsappv2.data.local.db.entities.ArticleEntity
+import com.example.newsappv2.data.local.db.entities.RemoteKeys
 import com.example.newsappv2.data.mlkit.OfflineTranslator
 import com.example.newsappv2.data.remote.translation.CloudTranslator
 import com.example.newsappv2.data.repository.NewsRepository
@@ -31,7 +32,7 @@ class NewsRemoteMediator(
     private val userPreferences: UserPreferencesDataStore
 ) : RemoteMediator<Int, ArticleEntity>() {
 
-    private val TAG = "NewsRemoteMediator"
+    private val tag = "NewsRemoteMediator"
 
     @ExperimentalPagingApi
     override suspend fun load(
@@ -39,14 +40,21 @@ class NewsRemoteMediator(
         state: PagingState<Int, ArticleEntity>
     ): MediatorResult {
         return try {
+            val currentQueryId = if (category != null) "category_$category" else "search_$query"
+
             val page = when (loadType) {
                 LoadType.REFRESH -> 1
                 LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
                 LoadType.APPEND -> {
-                    if (state.pages.isEmpty()) {
-                        return MediatorResult.Success(endOfPaginationReached = false)
+                    val remoteKeys = database.withTransaction {
+                        database.remoteKeysDao().remoteKeysId(currentQueryId)
                     }
-                    state.pages.size + 1
+
+                    if (remoteKeys?.nextKey == null) {
+                        return MediatorResult.Success(endOfPaginationReached = true)
+                    }
+
+                    remoteKeys.nextKey
                 }
             }
 
@@ -60,9 +68,10 @@ class NewsRemoteMediator(
             }
 
             val articles = response.body()?.articles.orEmpty()
+            val endOfPaginationReached = articles.isEmpty()
+
             val targetLangCode = userPreferences.targetLanguage.first()
             val hasInternet = networkMonitor.isOnline()
-
             offlineTranslator.downloadModelIfNeeded(targetLangCode)
 
             suspend fun smartTranslate(text: String?, type: String): String? {
@@ -75,12 +84,12 @@ class NewsRemoteMediator(
                         if (cloudResult.isSuccess) {
                             cloudResult.getOrNull() ?: text
                         } else {
-                            Log.e(TAG, "Cloud API ПОМИЛКА для $type: ${cloudResult.exceptionOrNull()?.message}")
+                            Log.e(tag, "Cloud API ПОМИЛКА для $type: ${cloudResult.exceptionOrNull()?.message}")
                             offlineTranslator.translate(text, targetLangCode).getOrNull() ?: text
                         }
                     }
                 } catch (e: Exception) {
-                    Log.e(TAG, "Критична помилка перекладу $type", e)
+                    Log.e(tag, "Критична помилка перекладу $type", e)
                     text
                 }
             }
@@ -111,21 +120,27 @@ class NewsRemoteMediator(
 
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
+                    database.remoteKeysDao().clearRemoteKeys(currentQueryId)
                     repository.clearUnsavedArticles()
                 }
+
+                val nextKey = if (endOfPaginationReached) null else page + 1
+                val keys = RemoteKeys(queryOrCategory = currentQueryId, nextKey = nextKey)
+
+                database.remoteKeysDao().insertKey(keys)
+
                 repository.insertArticles(entities)
             }
 
-            MediatorResult.Success(endOfPaginationReached = articles.isEmpty())
-
+            MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (e: IOException) {
-            Log.e(TAG, "Помилка мережі", e)
+            Log.e(tag, "Помилка мережі", e)
             MediatorResult.Error(e)
         } catch (e: HttpException) {
-            Log.e(TAG, "Помилка API", e)
+            Log.e(tag, "Помилка API", e)
             MediatorResult.Error(e)
         } catch (e: Exception) {
-            Log.e(TAG, "Невідома помилка", e)
+            Log.e(tag, "Невідома помилка", e)
             MediatorResult.Error(e)
         }
     }

@@ -24,13 +24,15 @@ import kotlinx.coroutines.launch
 fun RootScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-
+    startDestination: String
     ) {
     val currentRoute = currentRoute(navController)
-    val showBottomBar = currentRoute == HomeDestination.route ||
-            currentRoute == CategoriesDestination.route ||
-            currentRoute == SavedArticlesDestination.route ||
-            currentRoute == SettingsDestination.route
+    val showBottomBar = currentRoute in listOf(
+        HomeDestination.route,
+        CategoriesDestination.route,
+        SavedArticlesDestination.route,
+        SettingsDestination.route
+    )
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val onTabSelected: (String) -> Unit = { route ->
@@ -75,7 +77,8 @@ fun RootScreen(
                 ) { innerPadding ->
                     NewsNavHost(
                         contentPadding = innerPadding,
-                        navController = navController
+                        navController = navController,
+                        startDestination = startDestination
                     )
                 }
             }
@@ -102,7 +105,8 @@ fun RootScreen(
         ) { innerPadding ->
             NewsNavHost(
                 contentPadding = innerPadding,
-                navController = navController
+                navController = navController,
+                startDestination = startDestination
             )
 
         }

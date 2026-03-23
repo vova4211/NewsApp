@@ -48,4 +48,27 @@
     <string name="category_technology">Technologia</string>
     <string name="new_article_worker">Nowy artykuł!</string>
     <string name="сheck_the_latest_news">Sprawdź najnowsze wiadomości</string>
+    <string name="search_description">Szukaj</string>
+    <string name="clear_description">Wyczyść</string>
+    <string name="no_saved_articles">Brak zapisanych artykułów</string>
+    <string name="nothing_found">Nic nie znaleziono</string>
+    <string name="theme_mode">Motyw</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Jasny</string>
+    <string name="theme_dark">Ciemny</string>
+    <string name="onboarding_welcome">Witamy w NewsApp!</string>
+    <string name="onboarding_subtitle">Skonfigurujmy Twój profil</string>
+    <string name="user_avatar_desc">Awatar użytkownika</string>
+    <string name="choose_photo_desc">Wybierz zdjęcie</string>
+    <string name="click_to_add_photo">Kliknij, aby dodać zdjęcie</string>
+    <string name="enter_name_hint">Twoje imię lub pseudonim</string>
+    <string name="guest_name">Gość</string>
+    <string name="start_reading_news">Zacznij czytać wiadomości</string>
+    <string name="user_profile">User profile</string>
+    <string name="saved_articles">Zapisane artykuły</string>
+    <string name="edit_profile">Edytuj profil</string>
+    <string name="save">Zapisz</string>
+    <string name="cancel">Anuluj</string>
+
+
 </resources>

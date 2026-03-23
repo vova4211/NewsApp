@@ -1,6 +1,7 @@
 package com.example.newsappv2.ui.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.ImageNotSupported
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -39,18 +41,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
 import coil.request.ImageRequest
 import com.example.newsappv2.domain.model.Article
 import com.example.newsappv2.R
 import com.example.newsappv2.ui.theme.NewsAppV2Theme
 import com.example.newsappv2.util.formatAsDate
+import com.example.newsappv2.util.shimmerEffect
 
 @Composable
 fun NewsCard(
     modifier: Modifier = Modifier,
     article: Article,
-    // ДОДАЛИ НОВІ ПАРАМЕТРИ ДЛЯ ЗАКЛАДКИ
     isSaved: Boolean = false,
     onBookmarkClick: () -> Unit = {},
     onClick: () -> Unit,
@@ -109,6 +113,7 @@ fun NewsCard(
             Box( modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(16f / 9f)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .clip(
                     RoundedCornerShape(
                         topStart = dimensionResource(id = R.dimen.box_corner_radius),
@@ -121,21 +126,25 @@ fun NewsCard(
                         .data(urlToImageText)
                         .crossfade(true)
                         .build(),
-                    contentDescription = stringResource(R.string.missing_image),
-                    contentScale = ContentScale.FillWidth,
-                    error = painterResource(R.drawable.no_data_amico),
-                    onSuccess = { isLoading = false},
-                    onError = { isLoading = false},
-                    onLoading = { isLoading = true},
-                    modifier = Modifier.fillMaxSize()
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize(),
+                    onState = { state ->
+                        isLoading = state is AsyncImagePainter.State.Loading
+                    }
                 )
 
-                if (isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .size(dimensionResource(id = R.dimen.image_circular_loader))
+                if (article.urlToImage.isBlank()) {
+                    Icon(
+                        imageVector = Icons.Default.ImageNotSupported,
+                        contentDescription = null,
+                        modifier = Modifier.size(48.dp).align(Alignment.Center),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                     )
+                }
+
+                if (isLoading) {
+                    Box(modifier = Modifier.fillMaxSize().shimmerEffect())
                 }
             }
             Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.space_medium)))

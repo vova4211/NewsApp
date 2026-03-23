@@ -28,7 +28,7 @@ class HomeViewModel @Inject constructor(
     private val getSearchNewsUseCase: GetSearchNewsUseCase,
     private val processSearchQueryUseCase: ProcessSearchQueryUseCase,
     private val getRecentSearchQueriesUseCase: GetRecentSearchQueriesUseCase,
-    private val toggleBookmarkUseCase: ToggleBookmarkUseCase // ДОДАЛИ USE CASE ДЛЯ ЗАКЛАДОК
+    private val toggleBookmarkUseCase: ToggleBookmarkUseCase
 ) : ViewModel() {
 
     private val _searchQuery = MutableStateFlow("")

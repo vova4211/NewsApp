@@ -23,18 +23,30 @@ import com.example.newsappv2.ui.screens.SettingsScreen
 import com.example.newsappv2.viewmodel.CategoryViewModel
 import com.example.newsappv2.viewmodel.HomeViewModel
 import com.example.newsappv2.viewmodel.SavedArticlesViewModel
+import com.example.newsappv2.ui.screens.OnboardingDestination
+import com.example.newsappv2.ui.screens.OnboardingScreen
 
 @Composable
 fun NewsNavHost(
     navController: NavHostController,
+    startDestination: String,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     NavHost(
         navController = navController,
-        startDestination = HomeDestination.route,
+        startDestination = startDestination,
         modifier = modifier
     ) {
+        composable(route = OnboardingDestination.route) {
+            OnboardingScreen(
+                onFinish = {
+                    navController.navigate(HomeDestination.route) {
+                        popUpTo(OnboardingDestination.route) { inclusive = true }
+                    }
+                }
+            )
+        }
         composable(route = HomeDestination.route) {
             val viewModelHome: HomeViewModel = hiltViewModel()
             HomeScreen(

@@ -1,5 +1,6 @@
 package com.example.newsappv2.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -8,6 +9,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.ImageNotSupported
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -17,14 +19,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
 import com.example.newsappv2.R
+import com.example.newsappv2.ui.components.ArticleDetailsSkeleton
 import com.example.newsappv2.viewmodel.ArticleDetailsViewModel
+import com.example.newsappv2.util.shimmerEffect
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -105,21 +109,45 @@ fun ArticleDetailsScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            if (article != null) {
+            if (isLoading && article == null) {
+                ArticleDetailsSkeleton()
+            } else if (article != null) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState())
                 ) {
-                    AsyncImage(
-                        model = article!!.urlToImage,
-                        contentDescription = null,
+                    Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(250.dp),
-                        contentScale = ContentScale.Crop,
-                        error = painterResource(R.drawable.no_data_amico)
-                    )
+                            .height(250.dp)
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                    ) {
+                        var isImageLoading by remember { mutableStateOf(true) }
+
+                        AsyncImage(
+                            model = article!!.urlToImage,
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop,
+                            onState = { state ->
+                                isImageLoading = state is AsyncImagePainter.State.Loading
+                            }
+                        )
+
+                        if (isImageLoading) {
+                            Box(modifier = Modifier.fillMaxSize().shimmerEffect())
+                        }
+
+                        if (article!!.urlToImage.isBlank()) {
+                            Icon(
+                                imageVector = Icons.Default.ImageNotSupported,
+                                contentDescription = null,
+                                modifier = Modifier.size(64.dp).align(Alignment.Center),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                            )
+                        }
+                    }
 
                     Column(modifier = Modifier.padding(16.dp)) {
                         val titleToShow = if (isShowingTranslation && hasTranslation) {
@@ -148,9 +176,17 @@ fun ArticleDetailsScreen(
                         )
                         Spacer(modifier = Modifier.height(24.dp))
 
-                        if (isLoading) {
-                            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                                CircularProgressIndicator()
+                        if (isLoading && article!!.fullText == null) {
+                            Column {
+                                repeat(6) {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(14.dp)
+                                            .padding(vertical = 4.dp)
+                                            .shimmerEffect()
+                                    )
+                                }
                             }
                         } else {
                             Text(
@@ -163,8 +199,6 @@ fun ArticleDetailsScreen(
                         Spacer(modifier = Modifier.height(80.dp))
                     }
                 }
-            } else {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
 
             if (error != null) {

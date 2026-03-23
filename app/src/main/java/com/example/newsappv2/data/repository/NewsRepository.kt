@@ -40,7 +40,11 @@ interface NewsRepository {
 
     suspend fun clearUnsavedArticles()
     fun getSavedArticles(): Flow<List<ArticleEntity>>
+
+    fun searchSavedArticles(searchQuery: String): Flow<List<ArticleEntity>>
     suspend fun updateSavedStatus(url: String, isSaved: Boolean)
 
     suspend fun getArticlesForSmartSync(query: String): List<ArticleEntity>
+
+
 }

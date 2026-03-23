@@ -47,4 +47,25 @@
     <string name="category_technology">Технології</string>
     <string name="new_article_worker">Нова стаття!</string>
     <string name="сheck_the_latest_news">Перевірте свіжі новини</string>
+    <string name="search_description">Пошук</string>
+    <string name="clear_description">Очистити</string>
+    <string name="no_saved_articles">Немає збережених статей</string>
+    <string name="nothing_found">Нічого не знайдено</string>
+    <string name="theme_mode">Тема оформлення</string>
+    <string name="theme_system">Системна</string>
+    <string name="theme_light">Світла</string>
+    <string name="theme_dark">Темна</string>
+    <string name="onboarding_welcome">Вітаємо у NewsApp!</string>
+    <string name="onboarding_subtitle">Давайте налаштуємо ваш профіль</string>
+    <string name="user_avatar_desc">Аватар користувача</string>
+    <string name="choose_photo_desc">Вибрати фото</string>
+    <string name="click_to_add_photo">Натисніть, щоб додати фото</string>
+    <string name="enter_name_hint">Ваше ім\'я або нікнейм</string>
+    <string name="guest_name">Гість</string>
+    <string name="start_reading_news">Почати читати новини</string>
+    <string name="user_profile">Профіль користувача</string>
+    <string name="saved_articles">Збережені статті</string>
+    <string name="edit_profile">Редагувати профіль</string>
+    <string name="save">Зберегти</string>
+    <string name="cancel">Скасувати</string>
 </resources>

@@ -44,4 +44,14 @@ interface ArticleDao {
 
     @Query("SELECT * FROM articles WHERE type = 'search' AND `query` = :query AND full_text IS NULL ORDER BY published_at DESC LIMIT 5")
     suspend fun getArticlesForSmartSync(query: String): List<ArticleEntity>
+
+    @Query("""
+        SELECT * FROM articles 
+        WHERE is_saved = 1 
+        AND (title LIKE '%' || :searchQuery || '%' 
+             OR description LIKE '%' || :searchQuery || '%' 
+             OR full_text LIKE '%' || :searchQuery || '%') 
+        ORDER BY published_at DESC
+    """)
+    fun searchSavedArticles(searchQuery: String): kotlinx.coroutines.flow.Flow<List<ArticleEntity>>
 }

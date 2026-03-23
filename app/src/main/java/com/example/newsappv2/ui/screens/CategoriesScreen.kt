@@ -5,19 +5,21 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.newsappv2.R
 import com.example.newsappv2.domain.model.Article
 import com.example.newsappv2.navigation.NavigationDestination
 import com.example.newsappv2.ui.components.NewsCard
+import com.example.newsappv2.ui.components.NewsCardSkeleton
 import com.example.newsappv2.util.PagingLoadStateHandler
 import com.example.newsappv2.viewmodel.CategoryViewModel
-
 
 object CategoriesDestination: NavigationDestination {
     override val route = "categories"
 }
+
 @Composable
 fun CategoriesScreen(
     onArticleClicked: (String) -> Unit,
@@ -31,10 +33,10 @@ fun CategoriesScreen(
         newsCategoryItems = newsCategoryItems,
         onArticleClicked = onArticleClicked,
         onBookmarkClick = { url, isSaved ->
-            viewModel.toggleBookmark(url, isSaved) // ДОДАЛИ
+            viewModel.toggleBookmark(url, isSaved)
         },
         modifier = modifier,
-        contentPadding =contentPadding
+        contentPadding = contentPadding
     )
 }
 
@@ -50,26 +52,36 @@ fun CategoryNewsLazyPagingList(
         modifier = modifier,
         contentPadding = contentPadding
     ) {
-
-        items(newsCategoryItems.itemCount) { index ->
-            val article = newsCategoryItems[index]
-            article?.let {
-                NewsCard(
-                    article = it,
-                    isSaved = it.isSaved,
-                    onBookmarkClick = {
-                        onBookmarkClick(it.url, !it.isSaved)
-                    },
-                    onClick = { onArticleClicked(it.url) },
-                )
+        if (newsCategoryItems.loadState.refresh is LoadState.Loading) {
+            items(5) {
+                NewsCardSkeleton()
+            }
+        } else {
+            // РЕАЛЬНІ ДАНІ
+            items(newsCategoryItems.itemCount) { index ->
+                val article = newsCategoryItems[index]
+                article?.let {
+                    NewsCard(
+                        article = it,
+                        isSaved = it.isSaved,
+                        onBookmarkClick = {
+                            onBookmarkClick(it.url, !it.isSaved)
+                        },
+                        onClick = { onArticleClicked(it.url) },
+                    )
+                }
             }
         }
 
         newsCategoryItems.apply {
             item {
-                PagingLoadStateHandler(loadState = loadState.refresh, retry = { retry() })
+                // Показуємо помилку (якщо є) при першому завантаженні
+                if (loadState.refresh is LoadState.Error) {
+                    PagingLoadStateHandler(loadState = loadState.refresh, retry = { retry() })
+                }
             }
             item {
+                // Обробка дозавантаження (скролінг вниз)
                 PagingLoadStateHandler(loadState = loadState.append, retry = { retry() })
             }
         }

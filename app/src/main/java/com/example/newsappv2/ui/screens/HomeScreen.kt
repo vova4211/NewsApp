@@ -11,12 +11,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.newsappv2.R
 import com.example.newsappv2.domain.model.Article
 import com.example.newsappv2.navigation.NavigationDestination
 import com.example.newsappv2.ui.components.NewsCard
+import com.example.newsappv2.ui.components.NewsCardSkeleton
 import com.example.newsappv2.ui.components.OutlinedTextFieldHomeScreen
 import com.example.newsappv2.util.PagingLoadStateHandler
 import com.example.newsappv2.viewmodel.HomeViewModel
@@ -68,7 +70,6 @@ fun HomeNewsLazyPagingList(
     onSearchTextChange: (String) -> Unit,
     onSearchTriggered: (String) -> Unit,
     onUseRecentQuery: (String) -> Unit,
-    // 2. ДОДАЛИ НОВИЙ ПАРАМЕТР СЮДИ
     onBookmarkClick: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(dimensionResource(id = R.dimen.padding_zero))
@@ -86,7 +87,10 @@ fun HomeNewsLazyPagingList(
             onUseRecentQuery = onUseRecentQuery,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = dimensionResource(id = R.dimen.padding_large), vertical = dimensionResource(id = R.dimen.padding_default))
+                .padding(
+                    horizontal = dimensionResource(id = R.dimen.padding_large),
+                    vertical = dimensionResource(id = R.dimen.padding_default)
+                )
         )
         LazyColumn(
             modifier = Modifier
@@ -94,27 +98,39 @@ fun HomeNewsLazyPagingList(
                 .fillMaxWidth(),
             contentPadding = PaddingValues(bottom = dimensionResource(id = R.dimen.padding_large))
         ) {
-            items(newsItems.itemCount) { index ->
-                val article = newsItems[index]
-                article?.let {
-                    NewsCard(
-                        article = it,
-                        isSaved = it.isSaved,
-                        onBookmarkClick = {
-                            onBookmarkClick(it.url, !it.isSaved)
-                        },
-                        onClick = {
-                            val url = it.url
-                            onArticleClicked(url)
-                        }
-                    )
+            // ПЕРЕВІРКА НА СТАН ЗАВАНТАЖЕННЯ (SKELETON)
+            if (newsItems.loadState.refresh is LoadState.Loading) {
+                items(5) {
+                    NewsCardSkeleton()
+                }
+            } else {
+                // РЕАЛЬНІ ДАНІ
+                items(newsItems.itemCount) { index ->
+                    val article = newsItems[index]
+                    article?.let {
+                        NewsCard(
+                            article = it,
+                            isSaved = it.isSaved,
+                            onBookmarkClick = {
+                                onBookmarkClick(it.url, !it.isSaved)
+                            },
+                            onClick = {
+                                val url = it.url
+                                onArticleClicked(url)
+                            }
+                        )
+                    }
                 }
             }
+
             newsItems.apply {
                 item {
-                    PagingLoadStateHandler(loadState = loadState.refresh, retry = { retry() })
+                    if (loadState.refresh is LoadState.Error) {
+                        PagingLoadStateHandler(loadState = loadState.refresh, retry = { retry() })
+                    }
                 }
                 item {
+                    // Обробка дозавантаження (скролінг вниз)
                     PagingLoadStateHandler(loadState = loadState.append, retry = { retry() })
                 }
             }
