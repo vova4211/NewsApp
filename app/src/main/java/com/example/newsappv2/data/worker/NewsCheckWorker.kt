@@ -64,7 +64,7 @@ class NewsCheckWorker @AssistedInject constructor(
                     NotificationHelper.showNotification(
                         context = context,
                         title = context.getString(R.string.new_article_worker),
-                        message = latestArticle.title ?: "Перевірте свіжі новини"
+                        message = latestArticle.title ?: context.getString(R.string.сheck_the_latest_news)
                     )
 
                     Log.d(TAG, "New article detected. Notification sent.")
