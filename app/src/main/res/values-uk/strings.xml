@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">News App</string>
+    <string name="app_name">Novynator</string>
     <string name="retry">Повторити</string>
     <string name="loading">Завантаження...</string>
     <string name="back_button">назад</string>
@@ -55,7 +55,7 @@
     <string name="theme_system">Системна</string>
     <string name="theme_light">Світла</string>
     <string name="theme_dark">Темна</string>
-    <string name="onboarding_welcome">Вітаємо у NewsApp!</string>
+    <string name="onboarding_welcome">Вітаємо у Novynator!</string>
     <string name="onboarding_subtitle">Давайте налаштуємо ваш профіль</string>
     <string name="user_avatar_desc">Аватар користувача</string>
     <string name="choose_photo_desc">Вибрати фото</string>

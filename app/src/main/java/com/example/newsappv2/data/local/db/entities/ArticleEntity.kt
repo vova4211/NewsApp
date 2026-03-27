@@ -9,7 +9,6 @@ data class ArticleEntity(
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "url")
     val url: String,
-    // ... всі твої старі поля ...
     @ColumnInfo(name = "source_name")
     val sourceName: String?,
     @ColumnInfo(name = "author")

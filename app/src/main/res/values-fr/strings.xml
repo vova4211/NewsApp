@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">News App</string>
+    <string name="app_name">Novynator</string>
     <string name="retry">Réessayer</string>
     <string name="loading">Chargement</string>
     <string name="back_button">retour</string>
@@ -54,7 +54,7 @@
     <string name="theme_system">Système</string>
     <string name="theme_light">Clair</string>
     <string name="theme_dark">Sombre</string>
-    <string name="onboarding_welcome">Bienvenue sur NewsApp !</string>
+    <string name="onboarding_welcome">Bienvenue sur Novynator!</string>
     <string name="onboarding_subtitle">Configurons votre profil</string>
     <string name="user_avatar_desc">Avatar utilisateur</string>
     <string name="choose_photo_desc">Choisir une photo</string>
