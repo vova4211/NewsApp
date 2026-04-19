@@ -2,8 +2,9 @@ package com.example.newsappv2.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.newsappv2.domain.usecase.GetIsFirstLaunchUseCase // ТІЛЬКИ USE CASE
+import com.example.newsappv2.domain.usecase.GetIsFirstLaunchUseCase
 import com.example.newsappv2.domain.usecase.GetThemeModeUseCase
+import com.example.newsappv2.domain.usecase.GetUiLanguageUseCase // ДОДАНО
 import com.example.newsappv2.util.ThemeMode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,7 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     getThemeModeUseCase: GetThemeModeUseCase,
-    getIsFirstLaunchUseCase: GetIsFirstLaunchUseCase
+    getIsFirstLaunchUseCase: GetIsFirstLaunchUseCase,
+    getUiLanguageUseCase: GetUiLanguageUseCase // ДОДАНО
 ) : ViewModel() {
 
     val themeMode: StateFlow<ThemeMode> = getThemeModeUseCase()
@@ -29,5 +31,12 @@ class MainViewModel @Inject constructor(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = null
+        )
+
+    val uiLangCode: StateFlow<String> = getUiLanguageUseCase()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = "uk"
         )
 }

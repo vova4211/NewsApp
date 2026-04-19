@@ -91,7 +91,7 @@ class UserPreferencesDataStore @Inject constructor(
             }
         }
         .map { preferences ->
-            preferences[TARGET_LANGUAGE] ?: "en"
+            preferences[TARGET_LANGUAGE] ?: "uk"
         }
 
     val themeMode: Flow<ThemeMode> = dataStore.data
@@ -119,7 +119,7 @@ class UserPreferencesDataStore @Inject constructor(
             if (it is IOException) emit(emptyPreferences()) else throw it
         }
         .map { preferences ->
-            preferences[IS_FIRST_LAUNCH] ?: true // За замовчуванням true (перший запуск)
+            preferences[IS_FIRST_LAUNCH] ?: true
         }
 
     val userName: Flow<String> = dataStore.data

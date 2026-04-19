@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.example.newsappv2.data.local.datastore.UserPreferencesDataStore
 import com.example.newsappv2.domain.model.Article
 import com.example.newsappv2.domain.usecase.GetCategoryNewsUseCase
 import com.example.newsappv2.domain.usecase.GetSavedCategoryUseCase
+import com.example.newsappv2.domain.usecase.GetTargetLanguageUseCase
 import com.example.newsappv2.domain.usecase.SaveCategoryUseCase
 import com.example.newsappv2.domain.usecase.ToggleBookmarkUseCase
 import com.example.newsappv2.util.Category
@@ -31,7 +33,8 @@ class CategoryViewModel @Inject constructor(
     private val getCategoryNewsUseCase: GetCategoryNewsUseCase,
     private val getSavedCategoryUseCase: GetSavedCategoryUseCase,
     private val saveCategoryUseCase: SaveCategoryUseCase,
-    private val toggleBookmarkUseCase: ToggleBookmarkUseCase
+    private val toggleBookmarkUseCase: ToggleBookmarkUseCase,
+    private val getTargetLanguageUseCase: GetTargetLanguageUseCase
 ) : ViewModel() {
 
     private val _selectCategory = MutableStateFlow(Category.BUSINESS)
@@ -45,6 +48,13 @@ class CategoryViewModel @Inject constructor(
             }
         }
     }
+
+    val targetLanguage: StateFlow<String> = getTargetLanguageUseCase()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = ""
+        )
 
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     val newsCategoryPagingFlow: StateFlow<PagingData<Article>> =

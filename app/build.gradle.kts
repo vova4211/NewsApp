@@ -31,8 +31,8 @@ android {
         val apiKey = localProperties.getProperty("apiKey", "")
         buildConfigField("String", "API_KEY", "\"$apiKey\"")
 
-        val googleApiKey = localProperties.getProperty("GOOGLE_TRANSLATE_API_KEY", "")
-        buildConfigField("String", "GOOGLE_TRANSLATE_API_KEY", "\"$googleApiKey\"")
+        val googleKey = localProperties.getProperty("TRANSLATE", "")
+        buildConfigField("String", "TRANSLATE", "\"$googleKey\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -97,19 +97,13 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    // Hilt DI
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
-
-    // Hilt для WorkManager
     implementation(libs.hilt.work)
     ksp(libs.hilt.ext.compiler)
-
-    // ML Kit Translation
     implementation(libs.mlkit.translate)
     implementation(libs.mlkit.language.id)
-    // Jsoup
     implementation(libs.jsoup)
     implementation(libs.coroutines.play.services)
 }

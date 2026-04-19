@@ -1,7 +1,6 @@
 package com.example.newsappv2.data.remote.translation
 
 import android.text.Html
-import com.example.newsappv2.util.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -17,7 +16,7 @@ class CloudTranslator @Inject constructor(
                 val response = api.translate(
                     text = text,
                     targetLanguage = targetLanguage,
-                    apiKey = com.example.newsappv2.BuildConfig.GOOGLE_TRANSLATE_API_KEY // <--- БЕРЕМО КЛЮЧ З БЕЗПЕЧНОГО МІСЦЯ
+                    apiKey = com.example.newsappv2.BuildConfig.TRANSLATE
                 )
 
                 if (response.isSuccessful) {

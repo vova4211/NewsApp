@@ -3,6 +3,9 @@ package com.example.newsappv2.ui.screens
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.paging.LoadState
@@ -28,6 +31,13 @@ fun CategoriesScreen(
     modifier: Modifier = Modifier
 ) {
     val newsCategoryItems = viewModel.newsCategoryPagingFlow.collectAsLazyPagingItems()
+    val targetLanguage by viewModel.targetLanguage.collectAsState()
+
+    LaunchedEffect(targetLanguage) {
+        if (targetLanguage.isNotEmpty()) {
+            newsCategoryItems.refresh()
+        }
+    }
 
     CategoryNewsLazyPagingList(
         newsCategoryItems = newsCategoryItems,

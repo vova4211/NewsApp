@@ -86,8 +86,6 @@ class SettingsViewModel @Inject constructor(
     fun setUiLanguage(languageCode: String) {
         viewModelScope.launch {
             userPreferences.saveUiLanguage(languageCode)
-            val localeList = LocaleListCompat.forLanguageTags(languageCode)
-            AppCompatDelegate.setApplicationLocales(localeList)
         }
     }
 

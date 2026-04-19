@@ -38,7 +38,10 @@ interface NewsRepository {
 
     suspend fun updateArticleTranslation(url: String, translatedText: String, translatedTitle: String)
 
-    suspend fun clearUnsavedArticles()
+    suspend fun clearSearchCache(query: String?)
+    suspend fun clearCategoryCache(category: String?)
+    suspend fun clearUnreadUnsavedArticles()
+    suspend fun resetTranslationsForUnsaved()
     fun getSavedArticles(): Flow<List<ArticleEntity>>
 
     fun searchSavedArticles(searchQuery: String): Flow<List<ArticleEntity>>

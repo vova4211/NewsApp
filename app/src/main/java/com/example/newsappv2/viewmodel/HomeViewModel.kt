@@ -7,8 +7,9 @@ import androidx.paging.cachedIn
 import com.example.newsappv2.domain.model.Article
 import com.example.newsappv2.domain.usecase.GetRecentSearchQueriesUseCase
 import com.example.newsappv2.domain.usecase.GetSearchNewsUseCase
+import com.example.newsappv2.domain.usecase.GetTargetLanguageUseCase
 import com.example.newsappv2.domain.usecase.ProcessSearchQueryUseCase
-import com.example.newsappv2.domain.usecase.ToggleBookmarkUseCase // ДОДАЛИ ІМПОРТ
+import com.example.newsappv2.domain.usecase.ToggleBookmarkUseCase
 import com.example.newsappv2.util.Constants.DEFAULT_QUERY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,7 +29,8 @@ class HomeViewModel @Inject constructor(
     private val getSearchNewsUseCase: GetSearchNewsUseCase,
     private val processSearchQueryUseCase: ProcessSearchQueryUseCase,
     private val getRecentSearchQueriesUseCase: GetRecentSearchQueriesUseCase,
-    private val toggleBookmarkUseCase: ToggleBookmarkUseCase
+    private val toggleBookmarkUseCase: ToggleBookmarkUseCase,
+    private val getTargetLanguageUseCase: GetTargetLanguageUseCase
 ) : ViewModel() {
 
     private val _searchQuery = MutableStateFlow("")
@@ -40,6 +42,13 @@ class HomeViewModel @Inject constructor(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyList()
+        )
+
+    val targetLanguage: StateFlow<String> = getTargetLanguageUseCase()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = ""
         )
 
     private val _translatedQuery = MutableStateFlow(defaultQuery)

@@ -65,8 +65,21 @@ class NetworkNewsRepository(
         return database.articleDao().getArticlesForSmartSync(query)
     }
 
-    override suspend fun clearUnsavedArticles() = database.articleDao().clearUnsavedArticles()
+    override suspend fun clearSearchCache(query: String?) {
+        database.articleDao().clearSearchCache(query)
+    }
 
+    override suspend fun clearCategoryCache(category: String?) {
+        database.articleDao().clearCategoryCache(category)
+    }
+
+    override suspend fun clearUnreadUnsavedArticles() {
+        database.articleDao().clearUnreadUnsavedArticles()
+    }
+
+    override suspend fun resetTranslationsForUnsaved() {
+        database.articleDao().resetTranslationsForUnsaved()
+    }
     override suspend fun updateArticleTranslation(url: String, translatedText: String, translatedTitle: String) {
         database.articleDao().updateArticleTranslation(url, translatedText, translatedTitle)
     }

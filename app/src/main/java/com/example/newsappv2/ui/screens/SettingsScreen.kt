@@ -26,6 +26,7 @@ import coil.compose.AsyncImage
 import com.example.newsappv2.R
 import com.example.newsappv2.navigation.NavigationDestination
 import com.example.newsappv2.util.ThemeMode
+import com.example.newsappv2.util.saveImageToInternalStorage
 import com.example.newsappv2.viewmodel.SettingsViewModel
 
 object SettingsDestination: NavigationDestination {
@@ -47,7 +48,6 @@ fun SettingsScreen(
 
     var showEditDialog by remember { mutableStateOf(false) }
 
-    // Діалогове вікно
     if (showEditDialog) {
         EditProfileDialog(
             currentName = userName,
@@ -77,7 +77,6 @@ fun SettingsScreen(
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
-            // --- ШАПКА ПРОФІЛЮ ---
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -124,7 +123,6 @@ fun SettingsScreen(
                     )
                 }
 
-                // КНОПКА РЕДАГУВАННЯ
                 IconButton(onClick = { showEditDialog = true }) {
                     Icon(
                         imageVector = Icons.Default.Edit,
@@ -136,7 +134,6 @@ fun SettingsScreen(
 
             HorizontalDivider(modifier = Modifier.padding(bottom = 24.dp))
 
-            // --- НАЛАШТУВАННЯ МОВИ ІНТЕРФЕЙСУ ---
             Text(
                 text = stringResource(R.string.interface_language),
                 style = MaterialTheme.typography.titleLarge,
@@ -152,7 +149,6 @@ fun SettingsScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // --- НАЛАШТУВАННЯ МОВИ ПЕРЕКЛАДУ НОВИН ---
             Text(
                 text = stringResource(R.string.news_translation_language),
                 style = MaterialTheme.typography.titleLarge,
@@ -174,7 +170,6 @@ fun SettingsScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // --- НАЛАШТУВАННЯ ТЕМИ ---
             Text(
                 text = stringResource(R.string.theme_mode),
                 style = MaterialTheme.typography.titleLarge,
@@ -221,9 +216,10 @@ fun EditProfileDialog(
         contract = ActivityResultContracts.PickVisualMedia()
     ) { uri ->
         if (uri != null) {
-            val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            context.contentResolver.takePersistableUriPermission(uri, flag)
-            tempAvatarUri = uri
+            val internalUri = saveImageToInternalStorage(context, uri)
+            if (internalUri != null) {
+                tempAvatarUri = internalUri
+            }
         }
     }
 
@@ -297,7 +293,6 @@ fun EditProfileDialog(
     )
 }
 
-// ... LanguageDropdown залишається без змін ...
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LanguageDropdown(

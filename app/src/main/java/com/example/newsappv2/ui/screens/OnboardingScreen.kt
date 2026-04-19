@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.newsappv2.R
 import com.example.newsappv2.navigation.NavigationDestination
+import com.example.newsappv2.util.saveImageToInternalStorage
 import com.example.newsappv2.viewmodel.OnboardingViewModel
 
 object OnboardingDestination : NavigationDestination {
@@ -45,9 +46,10 @@ fun OnboardingScreen(
         contract = ActivityResultContracts.PickVisualMedia()
     ) { uri ->
         if (uri != null) {
-            val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            context.contentResolver.takePersistableUriPermission(uri, flag)
-            avatarUri = uri
+            val internalUri = saveImageToInternalStorage(context, uri)
+            if (internalUri != null) {
+                avatarUri = internalUri
+            }
         }
     }
 

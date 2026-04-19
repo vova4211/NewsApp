@@ -121,7 +121,12 @@ class NewsRemoteMediator(
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     database.remoteKeysDao().clearRemoteKeys(currentQueryId)
-                    repository.clearUnsavedArticles()
+
+                    if (category != null) {
+                        repository.clearCategoryCache(category)
+                    } else {
+                        repository.clearSearchCache(query)
+                    }
                 }
 
                 val nextKey = if (endOfPaginationReached) null else page + 1

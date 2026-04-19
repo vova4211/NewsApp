@@ -47,7 +47,7 @@ fun NewsApp(
             val navController = rememberNavController()
             RootScreen(
                 navController = navController,
-                startDestination = startRoute, // ВИПРАВЛЕНО ПОМИЛКУ ТУТ!
+                startDestination = startRoute,
                 modifier = modifier
             )
         }
