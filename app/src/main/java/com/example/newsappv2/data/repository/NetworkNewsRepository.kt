@@ -88,6 +88,10 @@ class NetworkNewsRepository(
         database.articleDao().updateSavedStatusAndResetTranslation(url, isSaved)
     }
 
+    override suspend fun updateArticleTitleAndDescription(url: String, title: String, description: String?) {
+        database.articleDao().updateArticleTitleAndDescription(url, title, description)
+    }
+
     override suspend fun searchNews(
         query: String?,
         language: String,

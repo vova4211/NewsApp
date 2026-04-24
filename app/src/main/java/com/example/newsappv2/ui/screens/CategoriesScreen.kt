@@ -38,11 +38,10 @@ fun CategoriesScreen(
 
     var lastRefreshedLanguage by rememberSaveable { mutableStateOf("") }
 
-    // ЗМІНЮЄМО LAUNCHED EFFECT:
     LaunchedEffect(targetLanguage) {
         if (targetLanguage.isNotEmpty() && targetLanguage != lastRefreshedLanguage) {
             newsCategoryItems.refresh()
-            lastRefreshedLanguage = targetLanguage // Оновлюємо пам'ять
+            lastRefreshedLanguage = targetLanguage
         }
     }
 
@@ -69,7 +68,7 @@ fun CategoryNewsLazyPagingList(
         modifier = modifier,
         contentPadding = contentPadding
     ) {
-        if (newsCategoryItems.loadState.refresh is LoadState.Loading) {
+        if (newsCategoryItems.loadState.refresh is LoadState.Loading && newsCategoryItems.itemCount == 0) {
             items(5) {
                 NewsCardSkeleton()
             }
@@ -92,13 +91,11 @@ fun CategoryNewsLazyPagingList(
 
         newsCategoryItems.apply {
             item {
-                // Показуємо помилку (якщо є) при першому завантаженні
                 if (loadState.refresh is LoadState.Error) {
                     PagingLoadStateHandler(loadState = loadState.refresh, retry = { retry() })
                 }
             }
             item {
-                // Обробка дозавантаження (скролінг вниз)
                 PagingLoadStateHandler(loadState = loadState.append, retry = { retry() })
             }
         }

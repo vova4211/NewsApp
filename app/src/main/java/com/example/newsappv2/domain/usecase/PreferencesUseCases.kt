@@ -21,3 +21,10 @@ class SaveCategoryUseCase @Inject constructor(private val dataStore: UserPrefere
     suspend operator fun invoke(category: Category) = dataStore.saveSelectedCategory(category)
 }
 
+class PreferencesUseCases @Inject constructor(
+    val getSavedQuery: GetSavedQueryUseCase,
+    val saveQuery: SaveQueryUseCase,
+    val getSavedCategory: GetSavedCategoryUseCase,
+    val saveCategory: SaveCategoryUseCase
+)
+

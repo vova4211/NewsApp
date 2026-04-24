@@ -73,7 +73,7 @@ fun NewsCard(
         modifier = modifier
             .padding(dimensionResource(id = R.dimen.padding_default))
             .fillMaxWidth()
-            .clickable { onClick() }, // Перенесли onClick на всю картку для зручності
+            .clickable { onClick() },
         border = BorderStroke(dimensionResource(id = R.dimen.card_border_width), MaterialTheme.colorScheme.outlineVariant),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -170,7 +170,6 @@ fun NewsCard(
             Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.space_small)))
             Text(
                 text = descriptionText,
-                maxLines = 4,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,

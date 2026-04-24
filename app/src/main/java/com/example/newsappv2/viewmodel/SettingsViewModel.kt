@@ -2,16 +2,10 @@ package com.example.newsappv2.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
 import com.example.newsappv2.data.local.datastore.UserPreferencesDataStore
 import com.example.newsappv2.domain.usecase.ClearUnsavedArticlesUseCase
-import com.example.newsappv2.domain.usecase.GetThemeModeUseCase
-import com.example.newsappv2.domain.usecase.GetUserAvatarUriUseCase
-import com.example.newsappv2.domain.usecase.GetUserNameUseCase
-import com.example.newsappv2.domain.usecase.SaveTargetLanguageUseCase
-import com.example.newsappv2.domain.usecase.SaveThemeModeUseCase
-import com.example.newsappv2.domain.usecase.UpdateProfileUseCase
+import com.example.newsappv2.domain.usecase.ProfileUseCases
+import com.example.newsappv2.domain.usecase.SettingsUseCases
 import com.example.newsappv2.util.ThemeMode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,13 +17,9 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val userPreferences: UserPreferencesDataStore,
-    private val saveTargetLanguageUseCase: SaveTargetLanguageUseCase,
-    private val clearUnsavedArticlesUseCase: ClearUnsavedArticlesUseCase,
-    private val getThemeModeUseCase: GetThemeModeUseCase,
-    private val saveThemeModeUseCase: SaveThemeModeUseCase,
-    private val getUserNameUseCase: GetUserNameUseCase,
-    private val getUserAvatarUriUseCase: GetUserAvatarUriUseCase,
-    private val updateProfileUseCase: UpdateProfileUseCase
+    private val settingsUseCases: SettingsUseCases,
+    private val profileUseCases: ProfileUseCases,
+    private val clearUnsavedArticlesUseCase: ClearUnsavedArticlesUseCase
 ) : ViewModel() {
 
     val availableLanguages = mapOf(
@@ -55,21 +45,21 @@ class SettingsViewModel @Inject constructor(
             initialValue = "uk"
         )
 
-    val currentThemeMode: StateFlow<ThemeMode> = getThemeModeUseCase()
+    val currentThemeMode: StateFlow<ThemeMode> = settingsUseCases.getThemeMode()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = ThemeMode.SYSTEM
         )
 
-    val userName: StateFlow<String> = getUserNameUseCase()
+    val userName: StateFlow<String> = profileUseCases.getUserName()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = ""
         )
 
-    val userAvatarUri: StateFlow<String> = getUserAvatarUriUseCase()
+    val userAvatarUri: StateFlow<String> = profileUseCases.getUserAvatarUri()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -78,7 +68,7 @@ class SettingsViewModel @Inject constructor(
 
     fun setTargetLanguage(languageCode: String) {
         viewModelScope.launch {
-            saveTargetLanguageUseCase(languageCode)
+            settingsUseCases.saveTargetLanguage(languageCode)
             clearUnsavedArticlesUseCase()
         }
     }
@@ -91,13 +81,13 @@ class SettingsViewModel @Inject constructor(
 
     fun setThemeMode(mode: ThemeMode) {
         viewModelScope.launch {
-            saveThemeModeUseCase(mode)
+            settingsUseCases.saveThemeMode(mode)
         }
     }
 
     fun updateProfile(name: String, avatarUri: String) {
         viewModelScope.launch {
-            updateProfileUseCase(name, avatarUri)
+            profileUseCases.updateProfile(name, avatarUri)
         }
     }
 }

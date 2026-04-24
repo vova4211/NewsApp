@@ -24,7 +24,32 @@ class ToggleBookmarkUseCase @Inject constructor(
         repository.updateSavedStatusAndResetTranslation(url, isSaved)
 
         if (!isSaved) {
-            Log.d(TAG, "Статтю видалено із закладок: $url")
+            Log.d(TAG, "Статтю видалено із закладок: $url. Адаптуємо картку під поточну мову.")
+            try {
+                val article = repository.getArticleByUrl(url).firstOrNull() ?: return
+                val targetLangCode = userPreferences.targetLanguage.firstOrNull() ?: "uk"
+                val hasInternet = networkMonitor.isOnline()
+
+                offlineTranslator.downloadModelIfNeeded(targetLangCode)
+
+                suspend fun retranslate(text: String?): String? {
+                    if (text.isNullOrBlank()) return text
+                    return if (hasInternet) {
+                        val cloudResult = cloudTranslator.translate(text, targetLangCode)
+                        if (cloudResult.isSuccess) cloudResult.getOrNull()
+                        else offlineTranslator.translate(text, targetLangCode).getOrNull() ?: text
+                    } else {
+                        offlineTranslator.translate(text, targetLangCode).getOrNull() ?: text
+                    }
+                }
+
+                val newTitle = retranslate(article.title) ?: article.title ?: ""
+                val newDesc = retranslate(article.description) ?: article.description
+
+                repository.updateArticleTitleAndDescription(url, newTitle, newDesc)
+            } catch (e: Exception) {
+                Log.e(TAG, "Помилка при оновленні заголовка після видалення із закладок", e)
+            }
             return
         }
 

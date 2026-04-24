@@ -50,4 +50,7 @@ interface NewsRepository {
     suspend fun getArticlesForSmartSync(query: String): List<ArticleEntity>
 
     suspend fun updateSavedStatusAndResetTranslation(url: String, isSaved: Boolean)
+
+    suspend fun updateArticleTitleAndDescription(url: String, title: String, description: String?)
+
 }

@@ -49,7 +49,7 @@ fun HomeScreen(
     LaunchedEffect(targetLanguage) {
         if (targetLanguage.isNotEmpty() && targetLanguage != lastRefreshedLanguage) {
             newsItems.refresh()
-            lastRefreshedLanguage = targetLanguage // Оновлюємо пам'ять
+            lastRefreshedLanguage = targetLanguage
         }
     }
 
@@ -113,13 +113,11 @@ fun HomeNewsLazyPagingList(
                 .fillMaxWidth(),
             contentPadding = PaddingValues(bottom = dimensionResource(id = R.dimen.padding_large))
         ) {
-            // ПЕРЕВІРКА НА СТАН ЗАВАНТАЖЕННЯ (SKELETON)
-            if (newsItems.loadState.refresh is LoadState.Loading) {
+            if (newsItems.loadState.refresh is LoadState.Loading && newsItems.itemCount == 0) {
                 items(5) {
                     NewsCardSkeleton()
                 }
             } else {
-                // РЕАЛЬНІ ДАНІ
                 items(newsItems.itemCount) { index ->
                     val article = newsItems[index]
                     article?.let {

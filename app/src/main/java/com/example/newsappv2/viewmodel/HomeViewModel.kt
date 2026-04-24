@@ -6,31 +6,26 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.newsappv2.domain.model.Article
 import com.example.newsappv2.domain.usecase.GetRecentSearchQueriesUseCase
-import com.example.newsappv2.domain.usecase.GetSearchNewsUseCase
-import com.example.newsappv2.domain.usecase.GetTargetLanguageUseCase
+import com.example.newsappv2.domain.usecase.NewsUseCases
 import com.example.newsappv2.domain.usecase.ProcessSearchQueryUseCase
+import com.example.newsappv2.domain.usecase.SettingsUseCases
 import com.example.newsappv2.domain.usecase.ToggleBookmarkUseCase
 import com.example.newsappv2.util.Constants.DEFAULT_QUERY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 @OptIn(FlowPreview::class)
 class HomeViewModel @Inject constructor(
-    private val getSearchNewsUseCase: GetSearchNewsUseCase,
+    private val newsUseCases: NewsUseCases,
+    private val settingsUseCases: SettingsUseCases,
     private val processSearchQueryUseCase: ProcessSearchQueryUseCase,
     private val getRecentSearchQueriesUseCase: GetRecentSearchQueriesUseCase,
-    private val toggleBookmarkUseCase: ToggleBookmarkUseCase,
-    private val getTargetLanguageUseCase: GetTargetLanguageUseCase
+    private val toggleBookmarkUseCase: ToggleBookmarkUseCase
 ) : ViewModel() {
 
     private val _searchQuery = MutableStateFlow("")
@@ -44,7 +39,7 @@ class HomeViewModel @Inject constructor(
             initialValue = emptyList()
         )
 
-    val targetLanguage: StateFlow<String> = getTargetLanguageUseCase()
+    val targetLanguage: StateFlow<String> = settingsUseCases.getTargetLanguage()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -57,7 +52,7 @@ class HomeViewModel @Inject constructor(
     val homeNewsPagingFlow: StateFlow<PagingData<Article>> =
         _translatedQuery
             .flatMapLatest { query ->
-                getSearchNewsUseCase(query)
+                newsUseCases.getSearchNews(query)
             }
             .cachedIn(viewModelScope)
             .stateIn(

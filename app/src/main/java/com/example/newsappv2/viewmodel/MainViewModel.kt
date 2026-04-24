@@ -2,9 +2,8 @@ package com.example.newsappv2.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.newsappv2.domain.usecase.GetIsFirstLaunchUseCase
-import com.example.newsappv2.domain.usecase.GetThemeModeUseCase
-import com.example.newsappv2.domain.usecase.GetUiLanguageUseCase // ДОДАНО
+import com.example.newsappv2.domain.usecase.ProfileUseCases
+import com.example.newsappv2.domain.usecase.SettingsUseCases
 import com.example.newsappv2.util.ThemeMode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,26 +13,25 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    getThemeModeUseCase: GetThemeModeUseCase,
-    getIsFirstLaunchUseCase: GetIsFirstLaunchUseCase,
-    getUiLanguageUseCase: GetUiLanguageUseCase // ДОДАНО
+    settingsUseCases: SettingsUseCases,
+    profileUseCases: ProfileUseCases
 ) : ViewModel() {
 
-    val themeMode: StateFlow<ThemeMode> = getThemeModeUseCase()
+    val themeMode: StateFlow<ThemeMode> = settingsUseCases.getThemeMode()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = ThemeMode.SYSTEM
         )
 
-    val isFirstLaunch: StateFlow<Boolean?> = getIsFirstLaunchUseCase()
+    val isFirstLaunch: StateFlow<Boolean?> = profileUseCases.getIsFirstLaunch()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = null
         )
 
-    val uiLangCode: StateFlow<String> = getUiLanguageUseCase()
+    val uiLangCode: StateFlow<String> = settingsUseCases.getUiLanguage()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),

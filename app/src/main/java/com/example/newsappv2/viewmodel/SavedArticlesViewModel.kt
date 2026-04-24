@@ -3,25 +3,18 @@ package com.example.newsappv2.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsappv2.domain.model.Article
-import com.example.newsappv2.domain.usecase.GetSavedArticlesUseCase
-import com.example.newsappv2.domain.usecase.SearchSavedArticlesUseCase
+import com.example.newsappv2.domain.usecase.NewsUseCases
 import com.example.newsappv2.domain.usecase.ToggleBookmarkUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class SavedArticlesViewModel @Inject constructor(
-    private val getSavedArticlesUseCase: GetSavedArticlesUseCase,
-    private val searchSavedArticlesUseCase: SearchSavedArticlesUseCase, // ДОДАЛИ
+    private val newsUseCases: NewsUseCases,
     private val toggleBookmarkUseCase: ToggleBookmarkUseCase
 ) : ViewModel() {
 
@@ -31,9 +24,9 @@ class SavedArticlesViewModel @Inject constructor(
     val savedArticles: StateFlow<List<Article>> = _searchQuery
         .flatMapLatest { query ->
             if (query.isBlank()) {
-                getSavedArticlesUseCase()
+                newsUseCases.getSavedArticles()
             } else {
-                searchSavedArticlesUseCase(query)
+                newsUseCases.searchSavedArticles(query)
             }
         }
         .stateIn(
