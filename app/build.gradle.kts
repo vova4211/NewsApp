@@ -61,6 +61,7 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.compose.runtime.saveable)
     implementation(libs.room.paging)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)

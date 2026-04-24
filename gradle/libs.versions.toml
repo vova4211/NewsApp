@@ -28,6 +28,7 @@ mlkitTranslate = "17.0.2"
 jsoup = "1.17.2"
 mlkitLanguageId = "17.0.5"
 foundationLayout = "1.10.3"
+runtimeSaveable = "1.11.0"
 
 [libraries]
 # Hilt (Core + Navigation Compose + WorkManager)
@@ -77,6 +78,7 @@ androidx-navigation-compose-android = { group = "androidx.navigation", name = "n
 engage-core = { group = "com.google.android.engage", name = "engage-core", version.ref = "engageCore" }
 androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
+androidx-compose-runtime-saveable = { group = "androidx.compose.runtime", name = "runtime-saveable", version.ref = "runtimeSaveable" }
 
 [plugins]
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }

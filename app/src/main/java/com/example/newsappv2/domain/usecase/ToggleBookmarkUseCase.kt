@@ -21,7 +21,7 @@ class ToggleBookmarkUseCase @Inject constructor(
     private val TAG = "ToggleBookmark"
 
     suspend operator fun invoke(url: String, isSaved: Boolean) {
-        repository.updateSavedStatus(url, isSaved)
+        repository.updateSavedStatusAndResetTranslation(url, isSaved)
 
         if (!isSaved) {
             Log.d(TAG, "Статтю видалено із закладок: $url")

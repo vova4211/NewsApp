@@ -25,7 +25,7 @@ interface NewsRepository {
         page: Int = 1
     ) : Response<NewsResponse>
 
-    fun getArticleByUrl(url: String): kotlinx.coroutines.flow.Flow<ArticleEntity>
+    fun getArticleByUrl(url: String): Flow<ArticleEntity>
     fun getSearchNewsPager(query: String) : Flow<PagingData<ArticleEntity>>
     fun getCategoryNewsPager(category: String): Flow<PagingData<ArticleEntity>>
     fun getHomeNewsFromDb(query: String) : PagingSource<Int, ArticleEntity>
@@ -49,5 +49,5 @@ interface NewsRepository {
 
     suspend fun getArticlesForSmartSync(query: String): List<ArticleEntity>
 
-
+    suspend fun updateSavedStatusAndResetTranslation(url: String, isSaved: Boolean)
 }

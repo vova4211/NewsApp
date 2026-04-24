@@ -10,6 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.paging.LoadState
@@ -41,9 +44,12 @@ fun HomeScreen(
 
     val targetLanguage by viewModel.targetLanguage.collectAsState()
 
+    var lastRefreshedLanguage by rememberSaveable { mutableStateOf("") }
+
     LaunchedEffect(targetLanguage) {
-        if (targetLanguage.isNotEmpty()) {
+        if (targetLanguage.isNotEmpty() && targetLanguage != lastRefreshedLanguage) {
             newsItems.refresh()
+            lastRefreshedLanguage = targetLanguage // Оновлюємо пам'ять
         }
     }
 
@@ -139,7 +145,6 @@ fun HomeNewsLazyPagingList(
                     }
                 }
                 item {
-                    // Обробка дозавантаження (скролінг вниз)
                     PagingLoadStateHandler(loadState = loadState.append, retry = { retry() })
                 }
             }

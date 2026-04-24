@@ -63,4 +63,8 @@ interface ArticleDao {
         ORDER BY published_at DESC
     """)
     fun searchSavedArticles(searchQuery: String): kotlinx.coroutines.flow.Flow<List<ArticleEntity>>
+
+    @Query("UPDATE articles SET is_saved = :isSaved, translated_title = CASE WHEN :isSaved = 0 THEN NULL ELSE translated_title END, translated_text = CASE WHEN :isSaved = 0 THEN NULL ELSE translated_text END WHERE url = :url")
+    suspend fun updateSavedStatusAndResetTranslation(url: String, isSaved: Boolean)
+
 }
